@@ -1,0 +1,32 @@
+{
+  "checkout-api": {
+    "v41": {
+      "error_rate": "0.1%",
+      "p99_latency_ms": 320,
+      "cpu_utilization": "22%",
+      "memory_utilization": "45%"
+    },
+    "v42": {
+      "error_rate": "18.7%",
+      "p99_latency_ms": 5400,
+      "cpu_utilization": "25%",
+      "memory_utilization": "48%"
+    }
+  },
+  "inventory-service": {
+    "v1.4.0": {
+      "error_rate": "12.4%",
+      "p99_latency_ms": 8900,
+      "cpu_utilization": "88%",
+      "memory_utilization": "98%"
+    }
+  },
+  "payment-service": {
+    "v2.1.0": {
+      "error_rate": "8.3%",
+      "p99_latency_ms": 12000,
+      "active_db_connections": 100,
+      "db_wait_time_ms": 4500
+    }
+  }
+}

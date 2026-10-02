@@ -1,0 +1,32 @@
+[
+  {
+    "timestamp": "2026-10-02T14:35:00Z",
+    "service": "checkout-api",
+    "level": "ERROR",
+    "message": "POST /checkout failed: Upstream payment-service connection timeout after 5000ms"
+  },
+  {
+    "timestamp": "2026-10-02T14:35:12Z",
+    "service": "payment-service",
+    "level": "WARN",
+    "message": "Payment processing took 5200ms - request canceled by caller checkout-api"
+  },
+  {
+    "timestamp": "2026-10-02T16:45:00Z",
+    "service": "inventory-service",
+    "level": "CRITICAL",
+    "message": "java.lang.OutOfMemoryError: Java heap space. Process terminated by OOMKiller"
+  },
+  {
+    "timestamp": "2026-10-02T16:45:02Z",
+    "service": "inventory-service",
+    "level": "ERROR",
+    "message": "Container restart count reached 5 in last 10 minutes"
+  },
+  {
+    "timestamp": "2026-10-02T18:30:15Z",
+    "service": "payment-service",
+    "level": "ERROR",
+    "message": "SQLException: Unable to acquire JDBC Connection - connection pool exhausted (max: 100)"
+  }
+]
