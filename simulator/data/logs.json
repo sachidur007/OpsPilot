@@ -1,32 +1,146 @@
 [
   {
-    "timestamp": "2026-10-02T14:35:00Z",
-    "service": "checkout-api",
-    "level": "ERROR",
-    "message": "POST /checkout failed: Upstream payment-service connection timeout after 5000ms"
-  },
-  {
-    "timestamp": "2026-10-02T14:35:12Z",
-    "service": "payment-service",
-    "level": "WARN",
-    "message": "Payment processing took 5200ms - request canceled by caller checkout-api"
-  },
-  {
-    "timestamp": "2026-10-02T16:45:00Z",
+    "timestamp": "2026-10-03T02:15:00Z",
     "service": "inventory-service",
     "level": "CRITICAL",
-    "message": "java.lang.OutOfMemoryError: Java heap space. Process terminated by OOMKiller"
+    "message": "[Memory Leak] java.lang.OutOfMemoryError: Java heap space. Container restarted by OOMKiller"
   },
   {
-    "timestamp": "2026-10-02T16:45:02Z",
-    "service": "inventory-service",
-    "level": "ERROR",
-    "message": "Container restart count reached 5 in last 10 minutes"
-  },
-  {
-    "timestamp": "2026-10-02T18:30:15Z",
+    "timestamp": "2026-10-03T03:15:00Z",
     "service": "payment-service",
+    "level": "CRITICAL",
+    "message": "[Connection Pool Exhaustion] SQLException: Unable to acquire JDBC Connection - pool size (100) exceeded"
+  },
+  {
+    "timestamp": "2026-10-03T04:15:00Z",
+    "service": "auth-service",
     "level": "ERROR",
-    "message": "SQLException: Unable to acquire JDBC Connection - connection pool exhausted (max: 100)"
+    "message": "[Expired JWT Secret] SignatureVerificationException: The Token's Signature is invalid / Key Rotation Mismatch"
+  },
+  {
+    "timestamp": "2026-10-03T05:15:00Z",
+    "service": "notification-service",
+    "level": "ERROR",
+    "message": "[Deadlock] Thread Deadlock detected on pool-worker-8 waiting for lock on MailerQueue"
+  },
+  {
+    "timestamp": "2026-10-03T06:15:00Z",
+    "service": "search-indexer",
+    "level": "ERROR",
+    "message": "[High Garbage Collection Pause] GC Overhead Limit Exceeded: Stop-The-World pause > 15s"
+  },
+  {
+    "timestamp": "2026-10-03T07:15:00Z",
+    "service": "recommendation-engine",
+    "level": "ERROR",
+    "message": "[Model Weights Deserialization Failure] ValueError: Tensor shape mismatch during PyTorch model download from S3"
+  },
+  {
+    "timestamp": "2026-10-03T08:15:00Z",
+    "service": "user-profile-service",
+    "level": "ERROR",
+    "message": "[Infinite Loop Regression] CPU Utilization 100% on worker threads during avatar image normalization"
+  },
+  {
+    "timestamp": "2026-10-03T00:15:00Z",
+    "service": "postgres-primary",
+    "level": "CRITICAL",
+    "message": "[Disk Space Exhaustion] PANIC: could not write to file pg_wal/xlog: No space left on device (100% utilized)"
+  },
+  {
+    "timestamp": "2026-10-03T01:15:00Z",
+    "service": "redis-cache-cluster",
+    "level": "CRITICAL",
+    "message": "[OOM MaxMemory Eviction Policy Failure] OOM command not allowed when used memory > 'maxmemory' (noeviction active)"
+  },
+  {
+    "timestamp": "2026-10-03T02:15:00Z",
+    "service": "dynamodb-orders-table",
+    "level": "ERROR",
+    "message": "[Provisioned Throughput Exceeded] ProvisionedThroughputExceededException: Request rate is higher than provisioned write capacity"
+  },
+  {
+    "timestamp": "2026-10-03T03:15:00Z",
+    "service": "elasticsearch-logs",
+    "level": "ERROR",
+    "message": "[Unassigned Shards / Cluster Red State] ClusterHealthResult: RED - 14 primary shards unassigned due to disk watermark"
+  },
+  {
+    "timestamp": "2026-10-03T04:15:00Z",
+    "service": "mongo-analytics",
+    "level": "ERROR",
+    "message": "[Unindexed Field Scan Lock] Command failed with error 96: Operation Exceeded Time Limit (Executor error: Query plan scan > 1M docs)"
+  },
+  {
+    "timestamp": "2026-10-03T05:15:00Z",
+    "service": "ingress-nginx-controller",
+    "level": "ERROR",
+    "message": "[SSL Certificate Expiry] SSL_ERROR_EXPIRED_CERTIFICATE: x509: certificate has expired or is not yet valid"
+  },
+  {
+    "timestamp": "2026-10-03T06:15:00Z",
+    "service": "istio-service-mesh",
+    "level": "ERROR",
+    "message": "[mTLS Handshake Timeout] Envoy internal error: downstream connection termination / mTLS certificate validation failure"
+  },
+  {
+    "timestamp": "2026-10-03T07:15:00Z",
+    "service": "api-gateway",
+    "level": "ERROR",
+    "message": "[Rate Limiter Misconfiguration] HTTP 429 Too Many Requests: Rate limit set to 10 req/min instead of 10000 req/min"
+  },
+  {
+    "timestamp": "2026-10-03T08:15:00Z",
+    "service": "aws-s3-asset-bucket",
+    "level": "ERROR",
+    "message": "[IAM Access Denied Policy Drift] AccessDenied: User is not authorized to perform: s3:GetObject on resource"
+  },
+  {
+    "timestamp": "2026-10-03T00:15:00Z",
+    "service": "sqs-order-queue",
+    "level": "ERROR",
+    "message": "[DLQ Redrive Loop] KMS Key Access Denied: Failed to decrypt SQS message payload"
+  },
+  {
+    "timestamp": "2026-10-03T01:15:00Z",
+    "service": "dns-route53-resolver",
+    "level": "ERROR",
+    "message": "[Internal DNS Resolution Failure] getaddrinfo ENOTFOUND internal.services.local"
+  },
+  {
+    "timestamp": "2026-10-03T02:15:00Z",
+    "service": "kafka-event-bus",
+    "level": "ERROR",
+    "message": "[Broker Disk Full / Controller Failover] KafkaStorageException: Disk error on broker 3 / Partition offline"
+  },
+  {
+    "timestamp": "2026-10-03T03:15:00Z",
+    "service": "vault-secrets-manager",
+    "level": "ERROR",
+    "message": "[Sealed Vault Instance] VaultIsSealedException: Vault is sealed. Requests cannot be processed"
+  },
+  {
+    "timestamp": "2026-10-03T04:15:00Z",
+    "service": "prometheus-monitoring",
+    "level": "ERROR",
+    "message": "[TSDB Corruption] TSDB opening failed: compaction failed: segment block corrupted"
+  },
+  {
+    "timestamp": "2026-10-03T05:15:00Z",
+    "service": "rabbitmq-broker",
+    "level": "CRITICAL",
+    "message": "[Memory Alarm Triggered] rabbitmq_memory_high_watermark reached: blocking connections"
+  },
+  {
+    "timestamp": "2026-10-03T06:15:00Z",
+    "service": "cdn-cloudfront",
+    "level": "ERROR",
+    "message": "[Origin Host Header Mismatch] HTTP 502 Bad Gateway: Origin returned invalid SSL SNI host header"
+  },
+  {
+    "timestamp": "2026-10-03T07:15:00Z",
+    "service": "worker-celery-async",
+    "level": "ERROR",
+    "message": "[Unhandled Exception Loop] AttributeError: 'NoneType' object has no attribute 'stripe_id'"
   }
 ]

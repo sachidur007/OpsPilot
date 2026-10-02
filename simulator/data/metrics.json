@@ -1,32 +1,218 @@
 {
-  "checkout-api": {
-    "v41": {
-      "error_rate": "0.1%",
-      "p99_latency_ms": 320,
-      "cpu_utilization": "22%",
-      "memory_utilization": "45%"
-    },
-    "v42": {
-      "error_rate": "18.7%",
-      "p99_latency_ms": 5400,
-      "cpu_utilization": "25%",
-      "memory_utilization": "48%"
-    }
-  },
   "inventory-service": {
     "v1.4.0": {
-      "error_rate": "12.4%",
-      "p99_latency_ms": 8900,
-      "cpu_utilization": "88%",
-      "memory_utilization": "98%"
+      "error_rate": "24.5%",
+      "status": "DEGRADED",
+      "issue_type": "Memory Leak",
+      "impact_summary": "Pod restart loop count: 12",
+      "recommended_rollback": "v1.3.9"
     }
   },
   "payment-service": {
     "v2.1.0": {
-      "error_rate": "8.3%",
-      "p99_latency_ms": 12000,
-      "active_db_connections": 100,
-      "db_wait_time_ms": 4500
+      "error_rate": "24.5%",
+      "status": "DEGRADED",
+      "issue_type": "Connection Pool Exhaustion",
+      "impact_summary": "Latency spike to 12000ms",
+      "recommended_rollback": "v2.0.9"
+    }
+  },
+  "auth-service": {
+    "v3.0.2": {
+      "error_rate": "8.2%",
+      "status": "DEGRADED",
+      "issue_type": "Expired JWT Secret",
+      "impact_summary": "Global authentication failure (100% 401 response rate)",
+      "recommended_rollback": "v3.0.1"
+    }
+  },
+  "notification-service": {
+    "v1.1.5": {
+      "error_rate": "8.2%",
+      "status": "DEGRADED",
+      "issue_type": "Deadlock",
+      "impact_summary": "Background job queue backed up (>45,000 pending items)",
+      "recommended_rollback": "v1.1.4"
+    }
+  },
+  "search-indexer": {
+    "v2.5.0": {
+      "error_rate": "8.2%",
+      "status": "DEGRADED",
+      "issue_type": "High Garbage Collection Pause",
+      "impact_summary": "Search queries failing with 503 Service Unavailable",
+      "recommended_rollback": "v2.4.8"
+    }
+  },
+  "recommendation-engine": {
+    "v4.0.1": {
+      "error_rate": "8.2%",
+      "status": "DEGRADED",
+      "issue_type": "Model Weights Deserialization Failure",
+      "impact_summary": "Fallback to static recommendations, latency +800ms",
+      "recommended_rollback": "v4.0.0"
+    }
+  },
+  "user-profile-service": {
+    "v1.8.0": {
+      "error_rate": "8.2%",
+      "status": "DEGRADED",
+      "issue_type": "Infinite Loop Regression",
+      "impact_summary": "Node autoscaler thrashing",
+      "recommended_rollback": "v1.7.9"
+    }
+  },
+  "postgres-primary": {
+    "v15.2": {
+      "error_rate": "24.5%",
+      "status": "DEGRADED",
+      "issue_type": "Disk Space Exhaustion",
+      "impact_summary": "Database switched to read-only transaction state",
+      "recommended_rollback": "v15.1-failover"
+    }
+  },
+  "redis-cache-cluster": {
+    "v7.0": {
+      "error_rate": "24.5%",
+      "status": "DEGRADED",
+      "issue_type": "OOM MaxMemory Eviction Policy Failure",
+      "impact_summary": "Cache write drops across all dynamic routes",
+      "recommended_rollback": "v6.2-stable"
+    }
+  },
+  "dynamodb-orders-table": {
+    "v1.0": {
+      "error_rate": "8.2%",
+      "status": "DEGRADED",
+      "issue_type": "Provisioned Throughput Exceeded",
+      "impact_summary": "Order placement throttled for 15% of active users",
+      "recommended_rollback": "v1.0-autoscale"
+    }
+  },
+  "elasticsearch-logs": {
+    "v8.6": {
+      "error_rate": "8.2%",
+      "status": "DEGRADED",
+      "issue_type": "Unassigned Shards / Cluster Red State",
+      "impact_summary": "Search index read/write operations blocked",
+      "recommended_rollback": "v8.5-rebalance"
+    }
+  },
+  "mongo-analytics": {
+    "v5.9": {
+      "error_rate": "8.2%",
+      "status": "DEGRADED",
+      "issue_type": "Unindexed Field Scan Lock",
+      "impact_summary": "Read operations timed out on session aggregates",
+      "recommended_rollback": "v5.8-indexes"
+    }
+  },
+  "ingress-nginx-controller": {
+    "v1.8.0": {
+      "error_rate": "8.2%",
+      "status": "DEGRADED",
+      "issue_type": "SSL Certificate Expiry",
+      "impact_summary": "Browser security warnings blocking 100% of HTTPS traffic",
+      "recommended_rollback": "v1.7.9-certfix"
+    }
+  },
+  "istio-service-mesh": {
+    "v1.17": {
+      "error_rate": "8.2%",
+      "status": "DEGRADED",
+      "issue_type": "mTLS Handshake Timeout",
+      "impact_summary": "Inter-service pod communications dropped",
+      "recommended_rollback": "v1.16-permissive"
+    }
+  },
+  "api-gateway": {
+    "v2.4": {
+      "error_rate": "8.2%",
+      "status": "DEGRADED",
+      "issue_type": "Rate Limiter Misconfiguration",
+      "impact_summary": "All external API consumers throttled",
+      "recommended_rollback": "v2.3"
+    }
+  },
+  "aws-s3-asset-bucket": {
+    "v1.0": {
+      "error_rate": "8.2%",
+      "status": "DEGRADED",
+      "issue_type": "IAM Access Denied Policy Drift",
+      "impact_summary": "Frontend static assets (CSS/JS) returning 403 Forbidden",
+      "recommended_rollback": "v1.0-policy-restore"
+    }
+  },
+  "sqs-order-queue": {
+    "v1.0": {
+      "error_rate": "8.2%",
+      "status": "DEGRADED",
+      "issue_type": "DLQ Redrive Loop",
+      "impact_summary": "120,000 messages stuck in Dead-Letter Queue",
+      "recommended_rollback": "v1.0-kms-fix"
+    }
+  },
+  "dns-route53-resolver": {
+    "v1.0": {
+      "error_rate": "8.2%",
+      "status": "DEGRADED",
+      "issue_type": "Internal DNS Resolution Failure",
+      "impact_summary": "Services unable to locate internal endpoints",
+      "recommended_rollback": "v1.0-dns-flush"
+    }
+  },
+  "kafka-event-bus": {
+    "v3.4": {
+      "error_rate": "8.2%",
+      "status": "DEGRADED",
+      "issue_type": "Broker Disk Full / Controller Failover",
+      "impact_summary": "Event streaming consumers lag behind by > 2 hours",
+      "recommended_rollback": "v3.3-rebalance"
+    }
+  },
+  "vault-secrets-manager": {
+    "v1.13": {
+      "error_rate": "8.2%",
+      "status": "DEGRADED",
+      "issue_type": "Sealed Vault Instance",
+      "impact_summary": "Dynamic backend database credential retrieval blocked",
+      "recommended_rollback": "v1.12-unseal"
+    }
+  },
+  "prometheus-monitoring": {
+    "v2.43": {
+      "error_rate": "8.2%",
+      "status": "DEGRADED",
+      "issue_type": "TSDB Corruption",
+      "impact_summary": "Monitoring dashboards blank, alerting down",
+      "recommended_rollback": "v2.42-clean-db"
+    }
+  },
+  "rabbitmq-broker": {
+    "v3.11": {
+      "error_rate": "24.5%",
+      "status": "DEGRADED",
+      "issue_type": "Memory Alarm Triggered",
+      "impact_summary": "Publishers blocked from pushing messages",
+      "recommended_rollback": "v3.10-flush"
+    }
+  },
+  "cdn-cloudfront": {
+    "v1.0": {
+      "error_rate": "8.2%",
+      "status": "DEGRADED",
+      "issue_type": "Origin Host Header Mismatch",
+      "impact_summary": "Global static assets failing edge distribution",
+      "recommended_rollback": "v1.0-origin-fix"
+    }
+  },
+  "worker-celery-async": {
+    "v5.2": {
+      "error_rate": "8.2%",
+      "status": "DEGRADED",
+      "issue_type": "Unhandled Exception Loop",
+      "impact_summary": "Async worker pool crashing repeatedly on task consumer",
+      "recommended_rollback": "v5.1"
     }
   }
 }

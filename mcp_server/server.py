@@ -1,6 +1,7 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI
 from pydantic import BaseModel
 from mcp_server.tools.ops_tools import (
+    tool_list_available_services,
     tool_get_service_status,
     tool_query_logs,
     tool_query_metrics,
@@ -18,6 +19,10 @@ class RollbackRequest(BaseModel):
 @app.get("/health")
 def health_check():
     return {"status": "ok", "layer": "mcp-server"}
+
+@app.get("/tools/services")
+def list_services_endpoint():
+    return tool_list_available_services()
 
 @app.get("/tools/status/{service_name}")
 def get_status(service_name: str):

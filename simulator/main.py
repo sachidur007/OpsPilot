@@ -2,8 +2,11 @@ import json
 from pathlib import Path
 
 DATA_DIR = Path(__file__).parent / "data"
+STATE_FILE = DATA_DIR / "deployments.json"
 
 def get_logs(service: str = None, level: str = None):
+    if not (DATA_DIR / "logs.json").exists():
+        return []
     with open(DATA_DIR / "logs.json", "r") as f:
         logs = json.load(f)
     if service:
@@ -13,6 +16,8 @@ def get_logs(service: str = None, level: str = None):
     return logs
 
 def get_metrics(service: str = None):
+    if not (DATA_DIR / "metrics.json").exists():
+        return {}
     with open(DATA_DIR / "metrics.json", "r") as f:
         metrics = json.load(f)
     if service:
@@ -20,17 +25,28 @@ def get_metrics(service: str = None):
     return metrics
 
 def get_deployments(service: str = None):
-    with open(DATA_DIR / "deployments.json", "r") as f:
+    if not STATE_FILE.exists():
+        return []
+    with open(STATE_FILE, "r") as f:
         deployments = json.load(f)
     if service:
         deployments = [d for d in deployments if d["service"] == service]
     return deployments
 
+def apply_rollback_state(service: str, target_version: str):
+    deployments = get_deployments()
+    new_entry = {
+        "deployment_id": f"dep-rollback-{target_version}",
+        "service": service,
+        "version": target_version,
+        "timestamp": "2026-10-03T01:19:00Z",
+        "status": "SUCCESS",
+        "changes": f"Automated rollback to {target_version} performed by OpsPilot Agent"
+    }
+    deployments.append(new_entry)
+    with open(STATE_FILE, "w") as f:
+        json.dump(deployments, f, indent=2)
+    return new_entry
+
 if __name__ == "__main__":
-    print("--- Simulated Incident Scenarios ---")
-    print("1. Checkout API Error Spike (v42):")
-    print(json.dumps(get_metrics("checkout-api"), indent=2))
-    print("\n2. Inventory Service OOM Memory Leak:")
-    print(json.dumps(get_logs(service="inventory-service"), indent=2))
-    print("\n3. Payment Service DB Connection Pool Exhaustion:")
-    print(json.dumps(get_logs(service="payment-service"), indent=2))
+    print(f"Simulator ready. Currently loaded services: {len(get_metrics())}")
