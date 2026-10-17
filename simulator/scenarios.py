@@ -1,0 +1,46 @@
+"""Immutable catalog of the 24 failure scenarios. checkout-api stays out."""
+
+LAYERS = {
+    "application": "Application",
+    "data": "Data stores",
+    "edge": "Edge & mesh",
+    "platform": "Platform",
+}
+
+# error_rate is a fraction. SEV-1 is CRITICAL or >= 0.20, SEV-2 is >= 0.05, else SEV-3.
+SCENARIOS = [
+    {"service": "inventory-service", "layer": "application", "fault_version": "v1.4.0", "target": "v1.3.9", "action": "rollback", "issue_type": "Memory Leak", "error_rate": 0.245, "log_level": "CRITICAL", "impact": "Pod restart loop count: 12", "error": "java.lang.OutOfMemoryError: Java heap space. Container restarted by OOMKiller"},
+    {"service": "payment-service", "layer": "application", "fault_version": "v2.1.0", "target": "v2.0.9", "action": "rollback", "issue_type": "Connection Pool Exhaustion", "error_rate": 0.284, "log_level": "CRITICAL", "impact": "Latency spike to 12000ms", "error": "SQLException: Unable to acquire JDBC Connection - pool size (100) exceeded"},
+    {"service": "auth-service", "layer": "application", "fault_version": "v3.0.2", "target": "v3.0.1", "action": "rollback", "issue_type": "Expired JWT Secret", "error_rate": 0.082, "log_level": "ERROR", "impact": "Global authentication failure (100% 401 response rate)", "error": "SignatureVerificationException: The Token's Signature is invalid / Key Rotation Mismatch"},
+    {"service": "notification-service", "layer": "application", "fault_version": "v1.1.5", "target": "v1.1.4", "action": "rollback", "issue_type": "Deadlock", "error_rate": 0.082, "log_level": "ERROR", "impact": "Background job queue backed up (>45,000 pending items)", "error": "Thread Deadlock detected on pool-worker-8 waiting for lock on MailerQueue"},
+    {"service": "search-indexer", "layer": "application", "fault_version": "v2.5.0", "target": "v2.4.8", "action": "rollback", "issue_type": "High Garbage Collection Pause", "error_rate": 0.082, "log_level": "ERROR", "impact": "Search queries failing with 503 Service Unavailable", "error": "GC Overhead Limit Exceeded: Stop-The-World pause > 15s"},
+    {"service": "recommendation-engine", "layer": "application", "fault_version": "v4.0.1", "target": "v4.0.0", "action": "rollback", "issue_type": "Model Weights Deserialization Failure", "error_rate": 0.032, "log_level": "ERROR", "impact": "Fallback to static recommendations, latency +800ms", "error": "ValueError: Tensor shape mismatch during PyTorch model download from S3"},
+    {"service": "user-profile-service", "layer": "application", "fault_version": "v1.8.0", "target": "v1.7.9", "action": "scale_pods", "issue_type": "Infinite Loop Regression", "error_rate": 0.245, "log_level": "CRITICAL", "impact": "Node autoscaler thrashing", "error": "CPU Utilization 100% on worker threads during avatar image normalization"},
+    {"service": "postgres-primary", "layer": "data", "fault_version": "v15.2", "target": "v15.1-failover", "action": "failover", "issue_type": "Disk Space Exhaustion", "error_rate": 0.245, "log_level": "CRITICAL", "impact": "Database switched to read-only transaction state", "error": "PANIC: could not write to file pg_wal/xlog: No space left on device (100% utilized)"},
+    {"service": "redis-cache-cluster", "layer": "data", "fault_version": "v7.0", "target": "v6.2-stable", "action": "rollback", "issue_type": "OOM MaxMemory Eviction Policy Failure", "error_rate": 0.245, "log_level": "CRITICAL", "impact": "Cache write drops across all dynamic routes", "error": "OOM command not allowed when used memory > 'maxmemory' (noeviction active)"},
+    {"service": "dynamodb-orders-table", "layer": "data", "fault_version": "v1.0", "target": "v1.0-autoscale", "action": "scale_pods", "issue_type": "Provisioned Throughput Exceeded", "error_rate": 0.082, "log_level": "ERROR", "impact": "Order placement throttled for 15% of active users", "error": "ProvisionedThroughputExceededException: Request rate is higher than provisioned write capacity"},
+    {"service": "elasticsearch-logs", "layer": "data", "fault_version": "v8.6", "target": "v8.5-rebalance", "action": "failover", "issue_type": "Unassigned Shards / Cluster Red State", "error_rate": 0.082, "log_level": "ERROR", "impact": "Search index read/write operations blocked", "error": "ClusterHealthResult: RED - 14 primary shards unassigned due to disk watermark"},
+    {"service": "mongo-analytics", "layer": "data", "fault_version": "v5.9", "target": "v5.8-indexes", "action": "rollback", "issue_type": "Unindexed Field Scan Lock", "error_rate": 0.032, "log_level": "ERROR", "impact": "Read operations timed out on session aggregates", "error": "Command failed with error 96: Operation Exceeded Time Limit (Executor error: Query plan scan > 1M docs)"},
+    {"service": "ingress-nginx-controller", "layer": "edge", "fault_version": "v1.8.0", "target": "v1.7.9-certfix", "action": "cert_rotation", "issue_type": "Expired TLS Certificate", "error_rate": 0.082, "log_level": "ERROR", "impact": "Browser security warnings blocking 100% of HTTPS traffic", "error": "SSL_ERROR_EXPIRED_CERTIFICATE: x509: certificate has expired or is not yet valid"},
+    {"service": "istio-service-mesh", "layer": "edge", "fault_version": "v1.17", "target": "v1.16-permissive", "action": "cert_rotation", "issue_type": "mTLS Handshake Timeout", "error_rate": 0.082, "log_level": "ERROR", "impact": "Inter-service pod communications dropped", "error": "Envoy internal error: downstream connection termination / mTLS certificate validation failure"},
+    {"service": "api-gateway", "layer": "edge", "fault_version": "v2.4", "target": "v2.3", "action": "rollback", "issue_type": "Rate Limiter Misconfiguration", "error_rate": 0.082, "log_level": "ERROR", "impact": "All external API consumers throttled", "error": "HTTP 429 Too Many Requests: Rate limit set to 10 req/min instead of 10000 req/min"},
+    {"service": "aws-s3-asset-bucket", "layer": "edge", "fault_version": "v1.0", "target": "v1.0-policy-restore", "action": "rollback", "issue_type": "IAM Access Denied Policy Drift", "error_rate": 0.032, "log_level": "ERROR", "impact": "Frontend static assets (CSS/JS) returning 403 Forbidden", "error": "AccessDenied: User is not authorized to perform: s3:GetObject on resource"},
+    {"service": "sqs-order-queue", "layer": "edge", "fault_version": "v1.0", "target": "v1.0-kms-fix", "action": "rollback", "issue_type": "DLQ Redrive Loop", "error_rate": 0.082, "log_level": "ERROR", "impact": "120,000 messages stuck in Dead-Letter Queue", "error": "KMS Key Access Denied: Failed to decrypt SQS message payload"},
+    {"service": "dns-route53-resolver", "layer": "edge", "fault_version": "v1.0", "target": "v1.0-dns-flush", "action": "dns_flush", "issue_type": "Internal DNS Resolution Failure", "error_rate": 0.082, "log_level": "ERROR", "impact": "Services unable to locate internal endpoints", "error": "getaddrinfo ENOTFOUND internal.services.local"},
+    {"service": "cdn-cloudfront", "layer": "edge", "fault_version": "v1.0", "target": "v1.0-origin-fix", "action": "cert_rotation", "issue_type": "Origin Host Header Mismatch", "error_rate": 0.032, "log_level": "ERROR", "impact": "Global static assets failing edge distribution", "error": "HTTP 502 Bad Gateway: Origin returned invalid SSL SNI host header"},
+    {"service": "kafka-event-bus", "layer": "platform", "fault_version": "v3.4", "target": "v3.3-rebalance", "action": "failover", "issue_type": "Broker Disk Full / Controller Failover", "error_rate": 0.245, "log_level": "CRITICAL", "impact": "Event streaming consumers lag behind by > 2 hours", "error": "KafkaStorageException: Disk error on broker 3 / Partition offline"},
+    {"service": "vault-secrets-manager", "layer": "platform", "fault_version": "v1.13", "target": "v1.12-unseal", "action": "unseal", "issue_type": "Sealed Vault Instance", "error_rate": 0.082, "log_level": "ERROR", "impact": "Dynamic backend database credential retrieval blocked", "error": "VaultIsSealedException: Vault is sealed. Requests cannot be processed"},
+    {"service": "prometheus-monitoring", "layer": "platform", "fault_version": "v2.43", "target": "v2.42-clean-db", "action": "rollback", "issue_type": "TSDB Corruption", "error_rate": 0.032, "log_level": "ERROR", "impact": "Monitoring dashboards blank, alerting down", "error": "TSDB opening failed: compaction failed: segment block corrupted"},
+    {"service": "rabbitmq-broker", "layer": "platform", "fault_version": "v3.11", "target": "v3.10-flush", "action": "rollback", "issue_type": "Memory Alarm Triggered", "error_rate": 0.245, "log_level": "CRITICAL", "impact": "Publishers blocked from pushing messages", "error": "rabbitmq_memory_high_watermark reached: blocking connections"},
+    {"service": "worker-celery-async", "layer": "platform", "fault_version": "v5.2", "target": "v5.1", "action": "rollback", "issue_type": "Unhandled Exception Loop", "error_rate": 0.082, "log_level": "ERROR", "impact": "Async worker pool crashing repeatedly on task consumer", "error": "AttributeError: 'NoneType' object has no attribute 'stripe_id'"},
+]
+
+OPENING_INCIDENTS = (
+    "payment-service",
+    "vault-secrets-manager",
+    "ingress-nginx-controller",
+)
+
+ACTIONS = ("rollback", "unseal", "cert_rotation", "dns_flush", "scale_pods", "failover")
+
+SCENARIO_BY_SERVICE = {item["service"]: item for item in SCENARIOS}

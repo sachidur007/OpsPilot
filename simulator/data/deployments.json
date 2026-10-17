@@ -1,194 +1,194 @@
 [
   {
-    "deployment_id": "dep-101",
+    "deployment_id": "dep-base-inventory-service",
     "service": "inventory-service",
-    "version": "v1.4.0",
-    "timestamp": "2026-10-03T02:12:00Z",
+    "version": "v1.3.9",
+    "timestamp": "2026-10-08T08:26:45.947519+00:00",
     "status": "SUCCESS",
-    "changes": "Production release v1.4.0 - updated logic for inventory-service"
+    "changes": "Baseline release v1.3.9"
   },
   {
-    "deployment_id": "dep-102",
+    "deployment_id": "dep-base-payment-service",
     "service": "payment-service",
     "version": "v2.1.0",
-    "timestamp": "2026-10-03T03:12:00Z",
+    "timestamp": "2026-10-08T08:26:45.947519+00:00",
     "status": "SUCCESS",
-    "changes": "Production release v2.1.0 - updated logic for payment-service"
+    "changes": "Baseline release v2.1.0"
   },
   {
-    "deployment_id": "dep-103",
+    "deployment_id": "dep-base-auth-service",
     "service": "auth-service",
-    "version": "v3.0.2",
-    "timestamp": "2026-10-03T04:12:00Z",
+    "version": "v3.0.1",
+    "timestamp": "2026-10-08T08:26:45.947519+00:00",
     "status": "SUCCESS",
-    "changes": "Production release v3.0.2 - updated logic for auth-service"
+    "changes": "Baseline release v3.0.1"
   },
   {
-    "deployment_id": "dep-104",
+    "deployment_id": "dep-base-notification-service",
     "service": "notification-service",
-    "version": "v1.1.5",
-    "timestamp": "2026-10-03T05:12:00Z",
+    "version": "v1.1.4",
+    "timestamp": "2026-10-08T08:26:45.947519+00:00",
     "status": "SUCCESS",
-    "changes": "Production release v1.1.5 - updated logic for notification-service"
+    "changes": "Baseline release v1.1.4"
   },
   {
-    "deployment_id": "dep-105",
+    "deployment_id": "dep-base-search-indexer",
     "service": "search-indexer",
-    "version": "v2.5.0",
-    "timestamp": "2026-10-03T06:12:00Z",
+    "version": "v2.4.8",
+    "timestamp": "2026-10-08T08:26:45.947519+00:00",
     "status": "SUCCESS",
-    "changes": "Production release v2.5.0 - updated logic for search-indexer"
+    "changes": "Baseline release v2.4.8"
   },
   {
-    "deployment_id": "dep-106",
+    "deployment_id": "dep-base-recommendation-engine",
     "service": "recommendation-engine",
-    "version": "v4.0.1",
-    "timestamp": "2026-10-03T07:12:00Z",
+    "version": "v4.0.0",
+    "timestamp": "2026-10-08T08:26:45.947519+00:00",
     "status": "SUCCESS",
-    "changes": "Production release v4.0.1 - updated logic for recommendation-engine"
+    "changes": "Baseline release v4.0.0"
   },
   {
-    "deployment_id": "dep-107",
+    "deployment_id": "dep-base-user-profile-service",
     "service": "user-profile-service",
-    "version": "v1.8.0",
-    "timestamp": "2026-10-03T08:12:00Z",
+    "version": "v1.7.9",
+    "timestamp": "2026-10-08T08:26:45.947519+00:00",
     "status": "SUCCESS",
-    "changes": "Production release v1.8.0 - updated logic for user-profile-service"
+    "changes": "Baseline release v1.7.9"
   },
   {
-    "deployment_id": "dep-108",
+    "deployment_id": "dep-base-postgres-primary",
     "service": "postgres-primary",
-    "version": "v15.2",
-    "timestamp": "2026-10-03T00:12:00Z",
+    "version": "v15.1-failover",
+    "timestamp": "2026-10-08T08:26:45.947519+00:00",
     "status": "SUCCESS",
-    "changes": "Production release v15.2 - updated logic for postgres-primary"
+    "changes": "Baseline release v15.1-failover"
   },
   {
-    "deployment_id": "dep-109",
+    "deployment_id": "dep-base-redis-cache-cluster",
     "service": "redis-cache-cluster",
-    "version": "v7.0",
-    "timestamp": "2026-10-03T01:12:00Z",
+    "version": "v6.2-stable",
+    "timestamp": "2026-10-08T08:26:45.947519+00:00",
     "status": "SUCCESS",
-    "changes": "Production release v7.0 - updated logic for redis-cache-cluster"
+    "changes": "Baseline release v6.2-stable"
   },
   {
-    "deployment_id": "dep-110",
+    "deployment_id": "dep-base-dynamodb-orders-table",
     "service": "dynamodb-orders-table",
-    "version": "v1.0",
-    "timestamp": "2026-10-03T02:12:00Z",
+    "version": "v1.0-autoscale",
+    "timestamp": "2026-10-08T08:26:45.947519+00:00",
     "status": "SUCCESS",
-    "changes": "Production release v1.0 - updated logic for dynamodb-orders-table"
+    "changes": "Baseline release v1.0-autoscale"
   },
   {
-    "deployment_id": "dep-111",
+    "deployment_id": "dep-base-elasticsearch-logs",
     "service": "elasticsearch-logs",
-    "version": "v8.6",
-    "timestamp": "2026-10-03T03:12:00Z",
+    "version": "v8.5-rebalance",
+    "timestamp": "2026-10-08T08:26:45.947519+00:00",
     "status": "SUCCESS",
-    "changes": "Production release v8.6 - updated logic for elasticsearch-logs"
+    "changes": "Baseline release v8.5-rebalance"
   },
   {
-    "deployment_id": "dep-112",
+    "deployment_id": "dep-base-mongo-analytics",
     "service": "mongo-analytics",
-    "version": "v5.9",
-    "timestamp": "2026-10-03T04:12:00Z",
+    "version": "v5.8-indexes",
+    "timestamp": "2026-10-08T08:26:45.947519+00:00",
     "status": "SUCCESS",
-    "changes": "Production release v5.9 - updated logic for mongo-analytics"
+    "changes": "Baseline release v5.8-indexes"
   },
   {
-    "deployment_id": "dep-113",
+    "deployment_id": "dep-base-ingress-nginx-controller",
     "service": "ingress-nginx-controller",
     "version": "v1.8.0",
-    "timestamp": "2026-10-03T05:12:00Z",
+    "timestamp": "2026-10-08T08:26:45.947519+00:00",
     "status": "SUCCESS",
-    "changes": "Production release v1.8.0 - updated logic for ingress-nginx-controller"
+    "changes": "Baseline release v1.8.0"
   },
   {
-    "deployment_id": "dep-114",
+    "deployment_id": "dep-base-istio-service-mesh",
     "service": "istio-service-mesh",
-    "version": "v1.17",
-    "timestamp": "2026-10-03T06:12:00Z",
+    "version": "v1.16-permissive",
+    "timestamp": "2026-10-08T08:26:45.947519+00:00",
     "status": "SUCCESS",
-    "changes": "Production release v1.17 - updated logic for istio-service-mesh"
+    "changes": "Baseline release v1.16-permissive"
   },
   {
-    "deployment_id": "dep-115",
+    "deployment_id": "dep-base-api-gateway",
     "service": "api-gateway",
-    "version": "v2.4",
-    "timestamp": "2026-10-03T07:12:00Z",
+    "version": "v2.3",
+    "timestamp": "2026-10-08T08:26:45.947519+00:00",
     "status": "SUCCESS",
-    "changes": "Production release v2.4 - updated logic for api-gateway"
+    "changes": "Baseline release v2.3"
   },
   {
-    "deployment_id": "dep-116",
+    "deployment_id": "dep-base-aws-s3-asset-bucket",
     "service": "aws-s3-asset-bucket",
-    "version": "v1.0",
-    "timestamp": "2026-10-03T08:12:00Z",
+    "version": "v1.0-policy-restore",
+    "timestamp": "2026-10-08T08:26:45.947519+00:00",
     "status": "SUCCESS",
-    "changes": "Production release v1.0 - updated logic for aws-s3-asset-bucket"
+    "changes": "Baseline release v1.0-policy-restore"
   },
   {
-    "deployment_id": "dep-117",
+    "deployment_id": "dep-base-sqs-order-queue",
     "service": "sqs-order-queue",
-    "version": "v1.0",
-    "timestamp": "2026-10-03T00:12:00Z",
+    "version": "v1.0-kms-fix",
+    "timestamp": "2026-10-08T08:26:45.947519+00:00",
     "status": "SUCCESS",
-    "changes": "Production release v1.0 - updated logic for sqs-order-queue"
+    "changes": "Baseline release v1.0-kms-fix"
   },
   {
-    "deployment_id": "dep-118",
+    "deployment_id": "dep-base-dns-route53-resolver",
     "service": "dns-route53-resolver",
-    "version": "v1.0",
-    "timestamp": "2026-10-03T01:12:00Z",
+    "version": "v1.0-dns-flush",
+    "timestamp": "2026-10-08T08:26:45.947519+00:00",
     "status": "SUCCESS",
-    "changes": "Production release v1.0 - updated logic for dns-route53-resolver"
+    "changes": "Baseline release v1.0-dns-flush"
   },
   {
-    "deployment_id": "dep-119",
+    "deployment_id": "dep-base-cdn-cloudfront",
+    "service": "cdn-cloudfront",
+    "version": "v1.0-origin-fix",
+    "timestamp": "2026-10-08T08:26:45.947519+00:00",
+    "status": "SUCCESS",
+    "changes": "Baseline release v1.0-origin-fix"
+  },
+  {
+    "deployment_id": "dep-base-kafka-event-bus",
     "service": "kafka-event-bus",
-    "version": "v3.4",
-    "timestamp": "2026-10-03T02:12:00Z",
+    "version": "v3.3-rebalance",
+    "timestamp": "2026-10-08T08:26:45.947519+00:00",
     "status": "SUCCESS",
-    "changes": "Production release v3.4 - updated logic for kafka-event-bus"
+    "changes": "Baseline release v3.3-rebalance"
   },
   {
-    "deployment_id": "dep-120",
+    "deployment_id": "dep-base-vault-secrets-manager",
     "service": "vault-secrets-manager",
     "version": "v1.13",
-    "timestamp": "2026-10-03T03:12:00Z",
+    "timestamp": "2026-10-08T08:26:45.947519+00:00",
     "status": "SUCCESS",
-    "changes": "Production release v1.13 - updated logic for vault-secrets-manager"
+    "changes": "Baseline release v1.13"
   },
   {
-    "deployment_id": "dep-121",
+    "deployment_id": "dep-base-prometheus-monitoring",
     "service": "prometheus-monitoring",
-    "version": "v2.43",
-    "timestamp": "2026-10-03T04:12:00Z",
+    "version": "v2.42-clean-db",
+    "timestamp": "2026-10-08T08:26:45.947519+00:00",
     "status": "SUCCESS",
-    "changes": "Production release v2.43 - updated logic for prometheus-monitoring"
+    "changes": "Baseline release v2.42-clean-db"
   },
   {
-    "deployment_id": "dep-122",
+    "deployment_id": "dep-base-rabbitmq-broker",
     "service": "rabbitmq-broker",
-    "version": "v3.11",
-    "timestamp": "2026-10-03T05:12:00Z",
+    "version": "v3.10-flush",
+    "timestamp": "2026-10-08T08:26:45.947519+00:00",
     "status": "SUCCESS",
-    "changes": "Production release v3.11 - updated logic for rabbitmq-broker"
+    "changes": "Baseline release v3.10-flush"
   },
   {
-    "deployment_id": "dep-123",
-    "service": "cdn-cloudfront",
-    "version": "v1.0",
-    "timestamp": "2026-10-03T06:12:00Z",
-    "status": "SUCCESS",
-    "changes": "Production release v1.0 - updated logic for cdn-cloudfront"
-  },
-  {
-    "deployment_id": "dep-124",
+    "deployment_id": "dep-base-worker-celery-async",
     "service": "worker-celery-async",
-    "version": "v5.2",
-    "timestamp": "2026-10-03T07:12:00Z",
+    "version": "v5.1",
+    "timestamp": "2026-10-08T08:26:45.947519+00:00",
     "status": "SUCCESS",
-    "changes": "Production release v5.2 - updated logic for worker-celery-async"
+    "changes": "Baseline release v5.1"
   }
 ]

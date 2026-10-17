@@ -1,0 +1,1741 @@
+{
+  "version": 1,
+  "services": {
+    "inventory-service": {
+      "service_id": "inventory-service",
+      "layer": "application",
+      "layer_label": "Application",
+      "status": "DEGRADED",
+      "version": "v1.4.0",
+      "fault_version": "v1.4.0",
+      "stable_version": "v1.3.9",
+      "error_rate": 0.245,
+      "log_level": "CRITICAL",
+      "issue_type": "Memory Leak",
+      "impact_summary": "Pod restart loop count: 12",
+      "log_message": "[Memory Leak] java.lang.OutOfMemoryError: Java heap space. Container restarted by OOMKiller",
+      "log_timestamp": "2026-10-08T08:29:00.506765+00:00",
+      "recommended_action": "rollback",
+      "target": "v1.3.9",
+      "scenario_action": "rollback",
+      "scenario_target": "v1.3.9",
+      "scenario_issue": "Memory Leak",
+      "scenario_impact": "Pod restart loop count: 12",
+      "scenario_error": "java.lang.OutOfMemoryError: Java heap space. Container restarted by OOMKiller",
+      "scenario_error_rate": 0.245,
+      "scenario_log_level": "CRITICAL",
+      "proposal": {
+        "root_cause": "Memory Leak on v1.4.0. Pod restart loop count: 12",
+        "recommended_action": "rollback",
+        "target_version_or_value": "v1.3.9",
+        "source": "scenario-fallback"
+      },
+      "updated_at": "2026-10-09T14:20:03.801228+00:00",
+      "queue_order": 54
+    },
+    "payment-service": {
+      "service_id": "payment-service",
+      "layer": "application",
+      "layer_label": "Application",
+      "status": "DEGRADED",
+      "version": "v2.1.0",
+      "fault_version": "v2.1.0",
+      "stable_version": "v2.0.9",
+      "error_rate": 0.284,
+      "log_level": "CRITICAL",
+      "issue_type": "Connection Pool Exhaustion",
+      "impact_summary": "Latency spike to 12000ms",
+      "log_message": "[Connection Pool Exhaustion] SQLException: Unable to acquire JDBC Connection - pool size (100) exceeded",
+      "log_timestamp": "2026-10-08T08:26:45.947519+00:00",
+      "recommended_action": "rollback",
+      "target": "v2.0.9",
+      "scenario_action": "rollback",
+      "scenario_target": "v2.0.9",
+      "scenario_issue": "Connection Pool Exhaustion",
+      "scenario_impact": "Latency spike to 12000ms",
+      "scenario_error": "SQLException: Unable to acquire JDBC Connection - pool size (100) exceeded",
+      "scenario_error_rate": 0.284,
+      "scenario_log_level": "CRITICAL",
+      "proposal": {
+        "root_cause": "Connection Pool Exhaustion on v2.1.0. Latency spike to 12000ms",
+        "recommended_action": "rollback",
+        "target_version_or_value": "v2.0.9",
+        "source": "scenario-fallback"
+      },
+      "updated_at": "2026-10-17T15:53:35.182768+00:00",
+      "queue_order": 0
+    },
+    "auth-service": {
+      "service_id": "auth-service",
+      "layer": "application",
+      "layer_label": "Application",
+      "status": "DEGRADED",
+      "version": "v3.0.2",
+      "fault_version": "v3.0.2",
+      "stable_version": "v3.0.1",
+      "error_rate": 0.082,
+      "log_level": "ERROR",
+      "issue_type": "Expired JWT Secret",
+      "impact_summary": "Global authentication failure (100% 401 response rate)",
+      "log_message": "[Expired JWT Secret] SignatureVerificationException: The Token's Signature is invalid / Key Rotation Mismatch",
+      "log_timestamp": "2026-10-08T08:29:10.895197+00:00",
+      "recommended_action": "rollback",
+      "target": "v3.0.1",
+      "scenario_action": "rollback",
+      "scenario_target": "v3.0.1",
+      "scenario_issue": "Expired JWT Secret",
+      "scenario_impact": "Global authentication failure (100% 401 response rate)",
+      "scenario_error": "SignatureVerificationException: The Token's Signature is invalid / Key Rotation Mismatch",
+      "scenario_error_rate": 0.082,
+      "scenario_log_level": "ERROR",
+      "proposal": {
+        "root_cause": "Expired JWT Secret on v3.0.2. Global authentication failure (100% 401 response rate)",
+        "recommended_action": "rollback",
+        "target_version_or_value": "v3.0.1",
+        "source": "scenario-fallback"
+      },
+      "updated_at": "2026-10-09T14:20:07.078546+00:00",
+      "queue_order": 55
+    },
+    "notification-service": {
+      "service_id": "notification-service",
+      "layer": "application",
+      "layer_label": "Application",
+      "status": "HEALTHY",
+      "version": "v1.1.4",
+      "fault_version": "v1.1.5",
+      "stable_version": "v1.1.4",
+      "error_rate": 0.0,
+      "log_level": "INFO",
+      "issue_type": null,
+      "impact_summary": "Within baseline.",
+      "log_message": "notification-service steady on v1.1.4",
+      "log_timestamp": "2026-10-08T08:26:45.947519+00:00",
+      "recommended_action": "rollback",
+      "target": "v1.1.4",
+      "scenario_action": "rollback",
+      "scenario_target": "v1.1.4",
+      "scenario_issue": "Deadlock",
+      "scenario_impact": "Background job queue backed up (>45,000 pending items)",
+      "scenario_error": "Thread Deadlock detected on pool-worker-8 waiting for lock on MailerQueue",
+      "scenario_error_rate": 0.082,
+      "scenario_log_level": "ERROR",
+      "proposal": null,
+      "updated_at": "2026-10-08T08:26:45.947519+00:00",
+      "queue_order": 3
+    },
+    "search-indexer": {
+      "service_id": "search-indexer",
+      "layer": "application",
+      "layer_label": "Application",
+      "status": "HEALTHY",
+      "version": "v2.4.8",
+      "fault_version": "v2.5.0",
+      "stable_version": "v2.4.8",
+      "error_rate": 0.0,
+      "log_level": "INFO",
+      "issue_type": null,
+      "impact_summary": "Within baseline.",
+      "log_message": "search-indexer steady on v2.4.8",
+      "log_timestamp": "2026-10-08T08:26:45.947519+00:00",
+      "recommended_action": "rollback",
+      "target": "v2.4.8",
+      "scenario_action": "rollback",
+      "scenario_target": "v2.4.8",
+      "scenario_issue": "High Garbage Collection Pause",
+      "scenario_impact": "Search queries failing with 503 Service Unavailable",
+      "scenario_error": "GC Overhead Limit Exceeded: Stop-The-World pause > 15s",
+      "scenario_error_rate": 0.082,
+      "scenario_log_level": "ERROR",
+      "proposal": null,
+      "updated_at": "2026-10-08T08:26:45.947519+00:00",
+      "queue_order": 4
+    },
+    "recommendation-engine": {
+      "service_id": "recommendation-engine",
+      "layer": "application",
+      "layer_label": "Application",
+      "status": "HEALTHY",
+      "version": "v4.0.0",
+      "fault_version": "v4.0.1",
+      "stable_version": "v4.0.0",
+      "error_rate": 0.0,
+      "log_level": "INFO",
+      "issue_type": null,
+      "impact_summary": "Within baseline.",
+      "log_message": "recommendation-engine steady on v4.0.0",
+      "log_timestamp": "2026-10-08T08:26:45.947519+00:00",
+      "recommended_action": "rollback",
+      "target": "v4.0.0",
+      "scenario_action": "rollback",
+      "scenario_target": "v4.0.0",
+      "scenario_issue": "Model Weights Deserialization Failure",
+      "scenario_impact": "Fallback to static recommendations, latency +800ms",
+      "scenario_error": "ValueError: Tensor shape mismatch during PyTorch model download from S3",
+      "scenario_error_rate": 0.032,
+      "scenario_log_level": "ERROR",
+      "proposal": null,
+      "updated_at": "2026-10-08T08:26:45.947519+00:00",
+      "queue_order": 5
+    },
+    "user-profile-service": {
+      "service_id": "user-profile-service",
+      "layer": "application",
+      "layer_label": "Application",
+      "status": "HEALTHY",
+      "version": "v1.7.9",
+      "fault_version": "v1.8.0",
+      "stable_version": "v1.7.9",
+      "error_rate": 0.0,
+      "log_level": "INFO",
+      "issue_type": null,
+      "impact_summary": "Within baseline.",
+      "log_message": "user-profile-service steady on v1.7.9",
+      "log_timestamp": "2026-10-08T08:26:45.947519+00:00",
+      "recommended_action": "scale_pods",
+      "target": "v1.7.9",
+      "scenario_action": "scale_pods",
+      "scenario_target": "v1.7.9",
+      "scenario_issue": "Infinite Loop Regression",
+      "scenario_impact": "Node autoscaler thrashing",
+      "scenario_error": "CPU Utilization 100% on worker threads during avatar image normalization",
+      "scenario_error_rate": 0.245,
+      "scenario_log_level": "CRITICAL",
+      "proposal": null,
+      "updated_at": "2026-10-08T08:26:45.947519+00:00",
+      "queue_order": 6
+    },
+    "postgres-primary": {
+      "service_id": "postgres-primary",
+      "layer": "data",
+      "layer_label": "Data stores",
+      "status": "HEALTHY",
+      "version": "v15.1-failover",
+      "fault_version": "v15.2",
+      "stable_version": "v15.1-failover",
+      "error_rate": 0.0,
+      "log_level": "INFO",
+      "issue_type": null,
+      "impact_summary": "Within baseline.",
+      "log_message": "postgres-primary steady on v15.1-failover",
+      "log_timestamp": "2026-10-08T08:26:45.947519+00:00",
+      "recommended_action": "failover",
+      "target": "v15.1-failover",
+      "scenario_action": "failover",
+      "scenario_target": "v15.1-failover",
+      "scenario_issue": "Disk Space Exhaustion",
+      "scenario_impact": "Database switched to read-only transaction state",
+      "scenario_error": "PANIC: could not write to file pg_wal/xlog: No space left on device (100% utilized)",
+      "scenario_error_rate": 0.245,
+      "scenario_log_level": "CRITICAL",
+      "proposal": null,
+      "updated_at": "2026-10-08T08:26:45.947519+00:00",
+      "queue_order": 7
+    },
+    "redis-cache-cluster": {
+      "service_id": "redis-cache-cluster",
+      "layer": "data",
+      "layer_label": "Data stores",
+      "status": "HEALTHY",
+      "version": "v6.2-stable",
+      "fault_version": "v7.0",
+      "stable_version": "v6.2-stable",
+      "error_rate": 0.0,
+      "log_level": "INFO",
+      "issue_type": null,
+      "impact_summary": "Within baseline.",
+      "log_message": "redis-cache-cluster steady on v6.2-stable",
+      "log_timestamp": "2026-10-08T08:26:45.947519+00:00",
+      "recommended_action": "rollback",
+      "target": "v6.2-stable",
+      "scenario_action": "rollback",
+      "scenario_target": "v6.2-stable",
+      "scenario_issue": "OOM MaxMemory Eviction Policy Failure",
+      "scenario_impact": "Cache write drops across all dynamic routes",
+      "scenario_error": "OOM command not allowed when used memory > 'maxmemory' (noeviction active)",
+      "scenario_error_rate": 0.245,
+      "scenario_log_level": "CRITICAL",
+      "proposal": null,
+      "updated_at": "2026-10-08T08:26:45.947519+00:00",
+      "queue_order": 8
+    },
+    "dynamodb-orders-table": {
+      "service_id": "dynamodb-orders-table",
+      "layer": "data",
+      "layer_label": "Data stores",
+      "status": "HEALTHY",
+      "version": "v1.0-autoscale",
+      "fault_version": "v1.0",
+      "stable_version": "v1.0-autoscale",
+      "error_rate": 0.0,
+      "log_level": "INFO",
+      "issue_type": null,
+      "impact_summary": "Within baseline.",
+      "log_message": "dynamodb-orders-table steady on v1.0-autoscale",
+      "log_timestamp": "2026-10-08T08:26:45.947519+00:00",
+      "recommended_action": "scale_pods",
+      "target": "v1.0-autoscale",
+      "scenario_action": "scale_pods",
+      "scenario_target": "v1.0-autoscale",
+      "scenario_issue": "Provisioned Throughput Exceeded",
+      "scenario_impact": "Order placement throttled for 15% of active users",
+      "scenario_error": "ProvisionedThroughputExceededException: Request rate is higher than provisioned write capacity",
+      "scenario_error_rate": 0.082,
+      "scenario_log_level": "ERROR",
+      "proposal": null,
+      "updated_at": "2026-10-08T08:26:45.947519+00:00",
+      "queue_order": 9
+    },
+    "elasticsearch-logs": {
+      "service_id": "elasticsearch-logs",
+      "layer": "data",
+      "layer_label": "Data stores",
+      "status": "HEALTHY",
+      "version": "v8.5-rebalance",
+      "fault_version": "v8.6",
+      "stable_version": "v8.5-rebalance",
+      "error_rate": 0.0,
+      "log_level": "INFO",
+      "issue_type": null,
+      "impact_summary": "Within baseline.",
+      "log_message": "elasticsearch-logs steady on v8.5-rebalance",
+      "log_timestamp": "2026-10-08T08:26:45.947519+00:00",
+      "recommended_action": "failover",
+      "target": "v8.5-rebalance",
+      "scenario_action": "failover",
+      "scenario_target": "v8.5-rebalance",
+      "scenario_issue": "Unassigned Shards / Cluster Red State",
+      "scenario_impact": "Search index read/write operations blocked",
+      "scenario_error": "ClusterHealthResult: RED - 14 primary shards unassigned due to disk watermark",
+      "scenario_error_rate": 0.082,
+      "scenario_log_level": "ERROR",
+      "proposal": null,
+      "updated_at": "2026-10-08T08:26:45.947519+00:00",
+      "queue_order": 10
+    },
+    "mongo-analytics": {
+      "service_id": "mongo-analytics",
+      "layer": "data",
+      "layer_label": "Data stores",
+      "status": "HEALTHY",
+      "version": "v5.8-indexes",
+      "fault_version": "v5.9",
+      "stable_version": "v5.8-indexes",
+      "error_rate": 0.0,
+      "log_level": "INFO",
+      "issue_type": null,
+      "impact_summary": "Within baseline.",
+      "log_message": "mongo-analytics steady on v5.8-indexes",
+      "log_timestamp": "2026-10-08T08:26:45.947519+00:00",
+      "recommended_action": "rollback",
+      "target": "v5.8-indexes",
+      "scenario_action": "rollback",
+      "scenario_target": "v5.8-indexes",
+      "scenario_issue": "Unindexed Field Scan Lock",
+      "scenario_impact": "Read operations timed out on session aggregates",
+      "scenario_error": "Command failed with error 96: Operation Exceeded Time Limit (Executor error: Query plan scan > 1M docs)",
+      "scenario_error_rate": 0.032,
+      "scenario_log_level": "ERROR",
+      "proposal": null,
+      "updated_at": "2026-10-08T08:26:45.947519+00:00",
+      "queue_order": 11
+    },
+    "ingress-nginx-controller": {
+      "service_id": "ingress-nginx-controller",
+      "layer": "edge",
+      "layer_label": "Edge & mesh",
+      "status": "DEGRADED",
+      "version": "v1.8.0",
+      "fault_version": "v1.8.0",
+      "stable_version": "v1.7.9-certfix",
+      "error_rate": 0.082,
+      "log_level": "ERROR",
+      "issue_type": "Expired TLS Certificate",
+      "impact_summary": "Browser security warnings blocking 100% of HTTPS traffic",
+      "log_message": "[Expired TLS Certificate] SSL_ERROR_EXPIRED_CERTIFICATE: x509: certificate has expired or is not yet valid",
+      "log_timestamp": "2026-10-08T08:26:45.947519+00:00",
+      "recommended_action": "cert_rotation",
+      "target": "v1.7.9-certfix",
+      "scenario_action": "cert_rotation",
+      "scenario_target": "v1.7.9-certfix",
+      "scenario_issue": "Expired TLS Certificate",
+      "scenario_impact": "Browser security warnings blocking 100% of HTTPS traffic",
+      "scenario_error": "SSL_ERROR_EXPIRED_CERTIFICATE: x509: certificate has expired or is not yet valid",
+      "scenario_error_rate": 0.082,
+      "scenario_log_level": "ERROR",
+      "proposal": {
+        "root_cause": "Expired TLS Certificate on v1.8.0. Browser security warnings blocking 100% of HTTPS traffic",
+        "recommended_action": "cert_rotation",
+        "target_version_or_value": "v1.7.9-certfix",
+        "source": "scenario-fallback"
+      },
+      "updated_at": "2026-10-09T14:21:26.876809+00:00",
+      "queue_order": 2
+    },
+    "istio-service-mesh": {
+      "service_id": "istio-service-mesh",
+      "layer": "edge",
+      "layer_label": "Edge & mesh",
+      "status": "HEALTHY",
+      "version": "v1.16-permissive",
+      "fault_version": "v1.17",
+      "stable_version": "v1.16-permissive",
+      "error_rate": 0.0,
+      "log_level": "INFO",
+      "issue_type": null,
+      "impact_summary": "Within baseline.",
+      "log_message": "istio-service-mesh steady on v1.16-permissive",
+      "log_timestamp": "2026-10-08T08:26:45.947519+00:00",
+      "recommended_action": "cert_rotation",
+      "target": "v1.16-permissive",
+      "scenario_action": "cert_rotation",
+      "scenario_target": "v1.16-permissive",
+      "scenario_issue": "mTLS Handshake Timeout",
+      "scenario_impact": "Inter-service pod communications dropped",
+      "scenario_error": "Envoy internal error: downstream connection termination / mTLS certificate validation failure",
+      "scenario_error_rate": 0.082,
+      "scenario_log_level": "ERROR",
+      "proposal": null,
+      "updated_at": "2026-10-08T08:26:45.947519+00:00",
+      "queue_order": 13
+    },
+    "api-gateway": {
+      "service_id": "api-gateway",
+      "layer": "edge",
+      "layer_label": "Edge & mesh",
+      "status": "HEALTHY",
+      "version": "v2.3",
+      "fault_version": "v2.4",
+      "stable_version": "v2.3",
+      "error_rate": 0.0,
+      "log_level": "INFO",
+      "issue_type": null,
+      "impact_summary": "Within baseline.",
+      "log_message": "api-gateway steady on v2.3",
+      "log_timestamp": "2026-10-08T08:26:45.947519+00:00",
+      "recommended_action": "rollback",
+      "target": "v2.3",
+      "scenario_action": "rollback",
+      "scenario_target": "v2.3",
+      "scenario_issue": "Rate Limiter Misconfiguration",
+      "scenario_impact": "All external API consumers throttled",
+      "scenario_error": "HTTP 429 Too Many Requests: Rate limit set to 10 req/min instead of 10000 req/min",
+      "scenario_error_rate": 0.082,
+      "scenario_log_level": "ERROR",
+      "proposal": null,
+      "updated_at": "2026-10-08T08:26:45.947519+00:00",
+      "queue_order": 14
+    },
+    "aws-s3-asset-bucket": {
+      "service_id": "aws-s3-asset-bucket",
+      "layer": "edge",
+      "layer_label": "Edge & mesh",
+      "status": "HEALTHY",
+      "version": "v1.0-policy-restore",
+      "fault_version": "v1.0",
+      "stable_version": "v1.0-policy-restore",
+      "error_rate": 0.0,
+      "log_level": "INFO",
+      "issue_type": null,
+      "impact_summary": "Within baseline.",
+      "log_message": "aws-s3-asset-bucket steady on v1.0-policy-restore",
+      "log_timestamp": "2026-10-08T08:26:45.947519+00:00",
+      "recommended_action": "rollback",
+      "target": "v1.0-policy-restore",
+      "scenario_action": "rollback",
+      "scenario_target": "v1.0-policy-restore",
+      "scenario_issue": "IAM Access Denied Policy Drift",
+      "scenario_impact": "Frontend static assets (CSS/JS) returning 403 Forbidden",
+      "scenario_error": "AccessDenied: User is not authorized to perform: s3:GetObject on resource",
+      "scenario_error_rate": 0.032,
+      "scenario_log_level": "ERROR",
+      "proposal": null,
+      "updated_at": "2026-10-08T08:26:45.947519+00:00",
+      "queue_order": 15
+    },
+    "sqs-order-queue": {
+      "service_id": "sqs-order-queue",
+      "layer": "edge",
+      "layer_label": "Edge & mesh",
+      "status": "HEALTHY",
+      "version": "v1.0-kms-fix",
+      "fault_version": "v1.0",
+      "stable_version": "v1.0-kms-fix",
+      "error_rate": 0.0,
+      "log_level": "INFO",
+      "issue_type": null,
+      "impact_summary": "Within baseline.",
+      "log_message": "sqs-order-queue steady on v1.0-kms-fix",
+      "log_timestamp": "2026-10-08T08:26:45.947519+00:00",
+      "recommended_action": "rollback",
+      "target": "v1.0-kms-fix",
+      "scenario_action": "rollback",
+      "scenario_target": "v1.0-kms-fix",
+      "scenario_issue": "DLQ Redrive Loop",
+      "scenario_impact": "120,000 messages stuck in Dead-Letter Queue",
+      "scenario_error": "KMS Key Access Denied: Failed to decrypt SQS message payload",
+      "scenario_error_rate": 0.082,
+      "scenario_log_level": "ERROR",
+      "proposal": null,
+      "updated_at": "2026-10-08T08:26:45.947519+00:00",
+      "queue_order": 16
+    },
+    "dns-route53-resolver": {
+      "service_id": "dns-route53-resolver",
+      "layer": "edge",
+      "layer_label": "Edge & mesh",
+      "status": "HEALTHY",
+      "version": "v1.0-dns-flush",
+      "fault_version": "v1.0",
+      "stable_version": "v1.0-dns-flush",
+      "error_rate": 0.0,
+      "log_level": "INFO",
+      "issue_type": null,
+      "impact_summary": "Within baseline.",
+      "log_message": "dns-route53-resolver steady on v1.0-dns-flush",
+      "log_timestamp": "2026-10-08T08:26:45.947519+00:00",
+      "recommended_action": "dns_flush",
+      "target": "v1.0-dns-flush",
+      "scenario_action": "dns_flush",
+      "scenario_target": "v1.0-dns-flush",
+      "scenario_issue": "Internal DNS Resolution Failure",
+      "scenario_impact": "Services unable to locate internal endpoints",
+      "scenario_error": "getaddrinfo ENOTFOUND internal.services.local",
+      "scenario_error_rate": 0.082,
+      "scenario_log_level": "ERROR",
+      "proposal": null,
+      "updated_at": "2026-10-08T08:26:45.947519+00:00",
+      "queue_order": 17
+    },
+    "cdn-cloudfront": {
+      "service_id": "cdn-cloudfront",
+      "layer": "edge",
+      "layer_label": "Edge & mesh",
+      "status": "HEALTHY",
+      "version": "v1.0-origin-fix",
+      "fault_version": "v1.0",
+      "stable_version": "v1.0-origin-fix",
+      "error_rate": 0.0,
+      "log_level": "INFO",
+      "issue_type": null,
+      "impact_summary": "Within baseline.",
+      "log_message": "cdn-cloudfront steady on v1.0-origin-fix",
+      "log_timestamp": "2026-10-08T08:26:45.947519+00:00",
+      "recommended_action": "cert_rotation",
+      "target": "v1.0-origin-fix",
+      "scenario_action": "cert_rotation",
+      "scenario_target": "v1.0-origin-fix",
+      "scenario_issue": "Origin Host Header Mismatch",
+      "scenario_impact": "Global static assets failing edge distribution",
+      "scenario_error": "HTTP 502 Bad Gateway: Origin returned invalid SSL SNI host header",
+      "scenario_error_rate": 0.032,
+      "scenario_log_level": "ERROR",
+      "proposal": null,
+      "updated_at": "2026-10-08T08:26:45.947519+00:00",
+      "queue_order": 18
+    },
+    "kafka-event-bus": {
+      "service_id": "kafka-event-bus",
+      "layer": "platform",
+      "layer_label": "Platform",
+      "status": "HEALTHY",
+      "version": "v3.3-rebalance",
+      "fault_version": "v3.4",
+      "stable_version": "v3.3-rebalance",
+      "error_rate": 0.0,
+      "log_level": "INFO",
+      "issue_type": null,
+      "impact_summary": "Within baseline.",
+      "log_message": "kafka-event-bus steady on v3.3-rebalance",
+      "log_timestamp": "2026-10-08T08:26:45.947519+00:00",
+      "recommended_action": "failover",
+      "target": "v3.3-rebalance",
+      "scenario_action": "failover",
+      "scenario_target": "v3.3-rebalance",
+      "scenario_issue": "Broker Disk Full / Controller Failover",
+      "scenario_impact": "Event streaming consumers lag behind by > 2 hours",
+      "scenario_error": "KafkaStorageException: Disk error on broker 3 / Partition offline",
+      "scenario_error_rate": 0.245,
+      "scenario_log_level": "CRITICAL",
+      "proposal": null,
+      "updated_at": "2026-10-08T08:26:45.947519+00:00",
+      "queue_order": 19
+    },
+    "vault-secrets-manager": {
+      "service_id": "vault-secrets-manager",
+      "layer": "platform",
+      "layer_label": "Platform",
+      "status": "DEGRADED",
+      "version": "v1.13",
+      "fault_version": "v1.13",
+      "stable_version": "v1.12-unseal",
+      "error_rate": 0.082,
+      "log_level": "ERROR",
+      "issue_type": "Sealed Vault Instance",
+      "impact_summary": "Dynamic backend database credential retrieval blocked",
+      "log_message": "[Sealed Vault Instance] VaultIsSealedException: Vault is sealed. Requests cannot be processed",
+      "log_timestamp": "2026-10-08T08:26:45.947519+00:00",
+      "recommended_action": "unseal",
+      "target": "v1.12-unseal",
+      "scenario_action": "unseal",
+      "scenario_target": "v1.12-unseal",
+      "scenario_issue": "Sealed Vault Instance",
+      "scenario_impact": "Dynamic backend database credential retrieval blocked",
+      "scenario_error": "VaultIsSealedException: Vault is sealed. Requests cannot be processed",
+      "scenario_error_rate": 0.082,
+      "scenario_log_level": "ERROR",
+      "proposal": {
+        "root_cause": "Sealed Vault Instance on v1.13. Dynamic backend database credential retrieval blocked",
+        "recommended_action": "unseal",
+        "target_version_or_value": "v1.12-unseal",
+        "source": "scenario-fallback"
+      },
+      "updated_at": "2026-10-09T14:20:05.175271+00:00",
+      "queue_order": 1
+    },
+    "prometheus-monitoring": {
+      "service_id": "prometheus-monitoring",
+      "layer": "platform",
+      "layer_label": "Platform",
+      "status": "HEALTHY",
+      "version": "v2.42-clean-db",
+      "fault_version": "v2.43",
+      "stable_version": "v2.42-clean-db",
+      "error_rate": 0.0,
+      "log_level": "INFO",
+      "issue_type": null,
+      "impact_summary": "Within baseline.",
+      "log_message": "prometheus-monitoring steady on v2.42-clean-db",
+      "log_timestamp": "2026-10-08T08:26:45.947519+00:00",
+      "recommended_action": "rollback",
+      "target": "v2.42-clean-db",
+      "scenario_action": "rollback",
+      "scenario_target": "v2.42-clean-db",
+      "scenario_issue": "TSDB Corruption",
+      "scenario_impact": "Monitoring dashboards blank, alerting down",
+      "scenario_error": "TSDB opening failed: compaction failed: segment block corrupted",
+      "scenario_error_rate": 0.032,
+      "scenario_log_level": "ERROR",
+      "proposal": null,
+      "updated_at": "2026-10-08T08:26:45.947519+00:00",
+      "queue_order": 21
+    },
+    "rabbitmq-broker": {
+      "service_id": "rabbitmq-broker",
+      "layer": "platform",
+      "layer_label": "Platform",
+      "status": "HEALTHY",
+      "version": "v3.10-flush",
+      "fault_version": "v3.11",
+      "stable_version": "v3.10-flush",
+      "error_rate": 0.0,
+      "log_level": "INFO",
+      "issue_type": null,
+      "impact_summary": "Within baseline.",
+      "log_message": "rabbitmq-broker steady on v3.10-flush",
+      "log_timestamp": "2026-10-08T08:26:45.947519+00:00",
+      "recommended_action": "rollback",
+      "target": "v3.10-flush",
+      "scenario_action": "rollback",
+      "scenario_target": "v3.10-flush",
+      "scenario_issue": "Memory Alarm Triggered",
+      "scenario_impact": "Publishers blocked from pushing messages",
+      "scenario_error": "rabbitmq_memory_high_watermark reached: blocking connections",
+      "scenario_error_rate": 0.245,
+      "scenario_log_level": "CRITICAL",
+      "proposal": null,
+      "updated_at": "2026-10-08T08:26:45.947519+00:00",
+      "queue_order": 22
+    },
+    "worker-celery-async": {
+      "service_id": "worker-celery-async",
+      "layer": "platform",
+      "layer_label": "Platform",
+      "status": "HEALTHY",
+      "version": "v5.1",
+      "fault_version": "v5.2",
+      "stable_version": "v5.1",
+      "error_rate": 0.0,
+      "log_level": "INFO",
+      "issue_type": null,
+      "impact_summary": "Within baseline.",
+      "log_message": "worker-celery-async steady on v5.1",
+      "log_timestamp": "2026-10-08T08:26:45.947519+00:00",
+      "recommended_action": "rollback",
+      "target": "v5.1",
+      "scenario_action": "rollback",
+      "scenario_target": "v5.1",
+      "scenario_issue": "Unhandled Exception Loop",
+      "scenario_impact": "Async worker pool crashing repeatedly on task consumer",
+      "scenario_error": "AttributeError: 'NoneType' object has no attribute 'stripe_id'",
+      "scenario_error_rate": 0.082,
+      "scenario_log_level": "ERROR",
+      "proposal": null,
+      "updated_at": "2026-10-08T08:26:45.947519+00:00",
+      "queue_order": 23
+    }
+  },
+  "chaos_queue": [
+    "notification-service",
+    "search-indexer",
+    "recommendation-engine",
+    "user-profile-service",
+    "postgres-primary",
+    "redis-cache-cluster",
+    "dynamodb-orders-table",
+    "elasticsearch-logs",
+    "mongo-analytics",
+    "istio-service-mesh",
+    "api-gateway",
+    "aws-s3-asset-bucket",
+    "sqs-order-queue",
+    "dns-route53-resolver",
+    "cdn-cloudfront",
+    "kafka-event-bus",
+    "prometheus-monitoring",
+    "rabbitmq-broker",
+    "worker-celery-async"
+  ],
+  "deployments": [
+    {
+      "deployment_id": "dep-base-inventory-service",
+      "service": "inventory-service",
+      "version": "v1.3.9",
+      "timestamp": "2026-10-08T08:26:45.947519+00:00",
+      "status": "SUCCESS",
+      "changes": "Baseline release v1.3.9"
+    },
+    {
+      "deployment_id": "dep-base-payment-service",
+      "service": "payment-service",
+      "version": "v2.1.0",
+      "timestamp": "2026-10-08T08:26:45.947519+00:00",
+      "status": "SUCCESS",
+      "changes": "Baseline release v2.1.0"
+    },
+    {
+      "deployment_id": "dep-base-auth-service",
+      "service": "auth-service",
+      "version": "v3.0.1",
+      "timestamp": "2026-10-08T08:26:45.947519+00:00",
+      "status": "SUCCESS",
+      "changes": "Baseline release v3.0.1"
+    },
+    {
+      "deployment_id": "dep-base-notification-service",
+      "service": "notification-service",
+      "version": "v1.1.4",
+      "timestamp": "2026-10-08T08:26:45.947519+00:00",
+      "status": "SUCCESS",
+      "changes": "Baseline release v1.1.4"
+    },
+    {
+      "deployment_id": "dep-base-search-indexer",
+      "service": "search-indexer",
+      "version": "v2.4.8",
+      "timestamp": "2026-10-08T08:26:45.947519+00:00",
+      "status": "SUCCESS",
+      "changes": "Baseline release v2.4.8"
+    },
+    {
+      "deployment_id": "dep-base-recommendation-engine",
+      "service": "recommendation-engine",
+      "version": "v4.0.0",
+      "timestamp": "2026-10-08T08:26:45.947519+00:00",
+      "status": "SUCCESS",
+      "changes": "Baseline release v4.0.0"
+    },
+    {
+      "deployment_id": "dep-base-user-profile-service",
+      "service": "user-profile-service",
+      "version": "v1.7.9",
+      "timestamp": "2026-10-08T08:26:45.947519+00:00",
+      "status": "SUCCESS",
+      "changes": "Baseline release v1.7.9"
+    },
+    {
+      "deployment_id": "dep-base-postgres-primary",
+      "service": "postgres-primary",
+      "version": "v15.1-failover",
+      "timestamp": "2026-10-08T08:26:45.947519+00:00",
+      "status": "SUCCESS",
+      "changes": "Baseline release v15.1-failover"
+    },
+    {
+      "deployment_id": "dep-base-redis-cache-cluster",
+      "service": "redis-cache-cluster",
+      "version": "v6.2-stable",
+      "timestamp": "2026-10-08T08:26:45.947519+00:00",
+      "status": "SUCCESS",
+      "changes": "Baseline release v6.2-stable"
+    },
+    {
+      "deployment_id": "dep-base-dynamodb-orders-table",
+      "service": "dynamodb-orders-table",
+      "version": "v1.0-autoscale",
+      "timestamp": "2026-10-08T08:26:45.947519+00:00",
+      "status": "SUCCESS",
+      "changes": "Baseline release v1.0-autoscale"
+    },
+    {
+      "deployment_id": "dep-base-elasticsearch-logs",
+      "service": "elasticsearch-logs",
+      "version": "v8.5-rebalance",
+      "timestamp": "2026-10-08T08:26:45.947519+00:00",
+      "status": "SUCCESS",
+      "changes": "Baseline release v8.5-rebalance"
+    },
+    {
+      "deployment_id": "dep-base-mongo-analytics",
+      "service": "mongo-analytics",
+      "version": "v5.8-indexes",
+      "timestamp": "2026-10-08T08:26:45.947519+00:00",
+      "status": "SUCCESS",
+      "changes": "Baseline release v5.8-indexes"
+    },
+    {
+      "deployment_id": "dep-base-ingress-nginx-controller",
+      "service": "ingress-nginx-controller",
+      "version": "v1.8.0",
+      "timestamp": "2026-10-08T08:26:45.947519+00:00",
+      "status": "SUCCESS",
+      "changes": "Baseline release v1.8.0"
+    },
+    {
+      "deployment_id": "dep-base-istio-service-mesh",
+      "service": "istio-service-mesh",
+      "version": "v1.16-permissive",
+      "timestamp": "2026-10-08T08:26:45.947519+00:00",
+      "status": "SUCCESS",
+      "changes": "Baseline release v1.16-permissive"
+    },
+    {
+      "deployment_id": "dep-base-api-gateway",
+      "service": "api-gateway",
+      "version": "v2.3",
+      "timestamp": "2026-10-08T08:26:45.947519+00:00",
+      "status": "SUCCESS",
+      "changes": "Baseline release v2.3"
+    },
+    {
+      "deployment_id": "dep-base-aws-s3-asset-bucket",
+      "service": "aws-s3-asset-bucket",
+      "version": "v1.0-policy-restore",
+      "timestamp": "2026-10-08T08:26:45.947519+00:00",
+      "status": "SUCCESS",
+      "changes": "Baseline release v1.0-policy-restore"
+    },
+    {
+      "deployment_id": "dep-base-sqs-order-queue",
+      "service": "sqs-order-queue",
+      "version": "v1.0-kms-fix",
+      "timestamp": "2026-10-08T08:26:45.947519+00:00",
+      "status": "SUCCESS",
+      "changes": "Baseline release v1.0-kms-fix"
+    },
+    {
+      "deployment_id": "dep-base-dns-route53-resolver",
+      "service": "dns-route53-resolver",
+      "version": "v1.0-dns-flush",
+      "timestamp": "2026-10-08T08:26:45.947519+00:00",
+      "status": "SUCCESS",
+      "changes": "Baseline release v1.0-dns-flush"
+    },
+    {
+      "deployment_id": "dep-base-cdn-cloudfront",
+      "service": "cdn-cloudfront",
+      "version": "v1.0-origin-fix",
+      "timestamp": "2026-10-08T08:26:45.947519+00:00",
+      "status": "SUCCESS",
+      "changes": "Baseline release v1.0-origin-fix"
+    },
+    {
+      "deployment_id": "dep-base-kafka-event-bus",
+      "service": "kafka-event-bus",
+      "version": "v3.3-rebalance",
+      "timestamp": "2026-10-08T08:26:45.947519+00:00",
+      "status": "SUCCESS",
+      "changes": "Baseline release v3.3-rebalance"
+    },
+    {
+      "deployment_id": "dep-base-vault-secrets-manager",
+      "service": "vault-secrets-manager",
+      "version": "v1.13",
+      "timestamp": "2026-10-08T08:26:45.947519+00:00",
+      "status": "SUCCESS",
+      "changes": "Baseline release v1.13"
+    },
+    {
+      "deployment_id": "dep-base-prometheus-monitoring",
+      "service": "prometheus-monitoring",
+      "version": "v2.42-clean-db",
+      "timestamp": "2026-10-08T08:26:45.947519+00:00",
+      "status": "SUCCESS",
+      "changes": "Baseline release v2.42-clean-db"
+    },
+    {
+      "deployment_id": "dep-base-rabbitmq-broker",
+      "service": "rabbitmq-broker",
+      "version": "v3.10-flush",
+      "timestamp": "2026-10-08T08:26:45.947519+00:00",
+      "status": "SUCCESS",
+      "changes": "Baseline release v3.10-flush"
+    },
+    {
+      "deployment_id": "dep-base-worker-celery-async",
+      "service": "worker-celery-async",
+      "version": "v5.1",
+      "timestamp": "2026-10-08T08:26:45.947519+00:00",
+      "status": "SUCCESS",
+      "changes": "Baseline release v5.1"
+    }
+  ],
+  "timeline": [
+    {
+      "timestamp": "2026-10-08T08:26:45.947519+00:00",
+      "service_id": null,
+      "kind": "scene",
+      "message": "Opening scene armed. payment-service, vault-secrets-manager, and ingress-nginx-controller are in incident. 21 services are healthy."
+    },
+    {
+      "timestamp": "2026-10-08T08:26:46.201906+00:00",
+      "service_id": "inventory-service",
+      "kind": "analysis",
+      "message": "Analysis (scenario-fallback): rollback -> v1.3.9. Memory Leak on v1.4.0. Pod restart loop count: 12"
+    },
+    {
+      "timestamp": "2026-10-08T08:26:46.313583+00:00",
+      "service_id": "inventory-service",
+      "kind": "analysis",
+      "message": "Analysis (scenario-fallback): rollback -> v1.3.9. Memory Leak on v1.4.0. Pod restart loop count: 12"
+    },
+    {
+      "timestamp": "2026-10-08T08:26:46.747844+00:00",
+      "service_id": "payment-service",
+      "kind": "analysis",
+      "message": "Analysis (scenario-fallback): rollback -> v2.0.9. Connection Pool Exhaustion on v2.1.0. Latency spike to 12000ms"
+    },
+    {
+      "timestamp": "2026-10-08T08:26:46.859371+00:00",
+      "service_id": "payment-service",
+      "kind": "analysis",
+      "message": "Analysis (scenario-fallback): rollback -> v2.0.9. Connection Pool Exhaustion on v2.1.0. Latency spike to 12000ms"
+    },
+    {
+      "timestamp": "2026-10-08T08:26:50.290331+00:00",
+      "service_id": "payment-service",
+      "kind": "analysis",
+      "message": "Analysis (scenario-fallback): rollback -> v2.0.9. Connection Pool Exhaustion on v2.1.0. Latency spike to 12000ms"
+    },
+    {
+      "timestamp": "2026-10-08T08:28:23.449636+00:00",
+      "service_id": "payment-service",
+      "kind": "analysis",
+      "message": "Analysis (scenario-fallback): rollback -> v2.0.9. Connection Pool Exhaustion on v2.1.0. Latency spike to 12000ms"
+    },
+    {
+      "timestamp": "2026-10-08T08:29:00.506823+00:00",
+      "service_id": "inventory-service",
+      "kind": "chaos",
+      "message": "Simulate Chaos degraded inventory-service: Memory Leak on v1.4.0. Proposed rollback -> v1.3.9."
+    },
+    {
+      "timestamp": "2026-10-08T08:29:01.105919+00:00",
+      "service_id": "inventory-service",
+      "kind": "analysis",
+      "message": "Analysis (scenario-fallback): rollback -> v1.3.9. Memory Leak on v1.4.0. Pod restart loop count: 12"
+    },
+    {
+      "timestamp": "2026-10-08T08:29:07.621754+00:00",
+      "service_id": "ingress-nginx-controller",
+      "kind": "analysis",
+      "message": "Analysis (scenario-fallback): cert_rotation -> v1.7.9-certfix. Expired TLS Certificate on v1.8.0. Browser security warnings blocking 100% of HTTPS traffic"
+    },
+    {
+      "timestamp": "2026-10-08T08:29:08.801075+00:00",
+      "service_id": "vault-secrets-manager",
+      "kind": "analysis",
+      "message": "Analysis (scenario-fallback): unseal -> v1.12-unseal. Sealed Vault Instance on v1.13. Dynamic backend database credential retrieval blocked"
+    },
+    {
+      "timestamp": "2026-10-08T08:29:10.895229+00:00",
+      "service_id": "auth-service",
+      "kind": "chaos",
+      "message": "Simulate Chaos degraded auth-service: Expired JWT Secret on v3.0.2. Proposed rollback -> v3.0.1."
+    },
+    {
+      "timestamp": "2026-10-08T08:29:11.345717+00:00",
+      "service_id": "auth-service",
+      "kind": "analysis",
+      "message": "Analysis (scenario-fallback): rollback -> v3.0.1. Expired JWT Secret on v3.0.2. Global authentication failure (100% 401 response rate)"
+    },
+    {
+      "timestamp": "2026-10-08T08:29:17.698954+00:00",
+      "service_id": "auth-service",
+      "kind": "analysis",
+      "message": "Analysis (scenario-fallback): rollback -> v3.0.1. Expired JWT Secret on v3.0.2. Global authentication failure (100% 401 response rate)"
+    },
+    {
+      "timestamp": "2026-10-08T08:29:17.828856+00:00",
+      "service_id": "payment-service",
+      "kind": "analysis",
+      "message": "Analysis (scenario-fallback): rollback -> v2.0.9. Connection Pool Exhaustion on v2.1.0. Latency spike to 12000ms"
+    },
+    {
+      "timestamp": "2026-10-08T08:29:21.809286+00:00",
+      "service_id": "payment-service",
+      "kind": "analysis",
+      "message": "Analysis (scenario-fallback): rollback -> v2.0.9. Connection Pool Exhaustion on v2.1.0. Latency spike to 12000ms"
+    },
+    {
+      "timestamp": "2026-10-08T08:39:47.776390+00:00",
+      "service_id": "payment-service",
+      "kind": "analysis",
+      "message": "Analysis (scenario-fallback): rollback -> v2.0.9. Connection Pool Exhaustion on v2.1.0. Latency spike to 12000ms"
+    },
+    {
+      "timestamp": "2026-10-08T08:39:47.859079+00:00",
+      "service_id": "payment-service",
+      "kind": "analysis",
+      "message": "Analysis (scenario-fallback): rollback -> v2.0.9. Connection Pool Exhaustion on v2.1.0. Latency spike to 12000ms"
+    },
+    {
+      "timestamp": "2026-10-08T08:40:26.117027+00:00",
+      "service_id": "payment-service",
+      "kind": "analysis",
+      "message": "Analysis (scenario-fallback): rollback -> v2.0.9. Connection Pool Exhaustion on v2.1.0. Latency spike to 12000ms"
+    },
+    {
+      "timestamp": "2026-10-08T08:45:27.999375+00:00",
+      "service_id": "payment-service",
+      "kind": "analysis",
+      "message": "Analysis (scenario-fallback): rollback -> v2.0.9. Connection Pool Exhaustion on v2.1.0. Latency spike to 12000ms"
+    },
+    {
+      "timestamp": "2026-10-08T14:20:05.128211+00:00",
+      "service_id": "payment-service",
+      "kind": "analysis",
+      "message": "Analysis (scenario-fallback): rollback -> v2.0.9. Connection Pool Exhaustion on v2.1.0. Latency spike to 12000ms"
+    },
+    {
+      "timestamp": "2026-10-08T14:22:48.491959+00:00",
+      "service_id": "payment-service",
+      "kind": "analysis",
+      "message": "Analysis (scenario-fallback): rollback -> v2.0.9. Connection Pool Exhaustion on v2.1.0. Latency spike to 12000ms"
+    },
+    {
+      "timestamp": "2026-10-08T14:22:49.170278+00:00",
+      "service_id": "payment-service",
+      "kind": "analysis",
+      "message": "Analysis (scenario-fallback): rollback -> v2.0.9. Connection Pool Exhaustion on v2.1.0. Latency spike to 12000ms"
+    },
+    {
+      "timestamp": "2026-10-08T14:28:15.921947+00:00",
+      "service_id": "payment-service",
+      "kind": "analysis",
+      "message": "Analysis (scenario-fallback): rollback -> v2.0.9. Connection Pool Exhaustion on v2.1.0. Latency spike to 12000ms"
+    },
+    {
+      "timestamp": "2026-10-08T14:36:48.529907+00:00",
+      "service_id": "payment-service",
+      "kind": "analysis",
+      "message": "Analysis (scenario-fallback): rollback -> v2.0.9. Connection Pool Exhaustion on v2.1.0. Latency spike to 12000ms"
+    },
+    {
+      "timestamp": "2026-10-08T14:37:04.808712+00:00",
+      "service_id": "payment-service",
+      "kind": "analysis",
+      "message": "Analysis (scenario-fallback): rollback -> v2.0.9. Connection Pool Exhaustion on v2.1.0. Latency spike to 12000ms"
+    },
+    {
+      "timestamp": "2026-10-08T14:37:17.201670+00:00",
+      "service_id": "inventory-service",
+      "kind": "analysis",
+      "message": "Analysis (scenario-fallback): rollback -> v1.3.9. Memory Leak on v1.4.0. Pod restart loop count: 12"
+    },
+    {
+      "timestamp": "2026-10-08T14:37:18.122980+00:00",
+      "service_id": "vault-secrets-manager",
+      "kind": "analysis",
+      "message": "Analysis (scenario-fallback): unseal -> v1.12-unseal. Sealed Vault Instance on v1.13. Dynamic backend database credential retrieval blocked"
+    },
+    {
+      "timestamp": "2026-10-08T14:37:19.249816+00:00",
+      "service_id": "ingress-nginx-controller",
+      "kind": "analysis",
+      "message": "Analysis (scenario-fallback): cert_rotation -> v1.7.9-certfix. Expired TLS Certificate on v1.8.0. Browser security warnings blocking 100% of HTTPS traffic"
+    },
+    {
+      "timestamp": "2026-10-08T14:37:20.068793+00:00",
+      "service_id": "auth-service",
+      "kind": "analysis",
+      "message": "Analysis (scenario-fallback): rollback -> v3.0.1. Expired JWT Secret on v3.0.2. Global authentication failure (100% 401 response rate)"
+    },
+    {
+      "timestamp": "2026-10-08T14:37:20.889448+00:00",
+      "service_id": "ingress-nginx-controller",
+      "kind": "analysis",
+      "message": "Analysis (scenario-fallback): cert_rotation -> v1.7.9-certfix. Expired TLS Certificate on v1.8.0. Browser security warnings blocking 100% of HTTPS traffic"
+    },
+    {
+      "timestamp": "2026-10-08T14:37:21.604566+00:00",
+      "service_id": "vault-secrets-manager",
+      "kind": "analysis",
+      "message": "Analysis (scenario-fallback): unseal -> v1.12-unseal. Sealed Vault Instance on v1.13. Dynamic backend database credential retrieval blocked"
+    },
+    {
+      "timestamp": "2026-10-08T14:37:22.628386+00:00",
+      "service_id": "inventory-service",
+      "kind": "analysis",
+      "message": "Analysis (scenario-fallback): rollback -> v1.3.9. Memory Leak on v1.4.0. Pod restart loop count: 12"
+    },
+    {
+      "timestamp": "2026-10-08T14:37:23.618851+00:00",
+      "service_id": "payment-service",
+      "kind": "analysis",
+      "message": "Analysis (scenario-fallback): rollback -> v2.0.9. Connection Pool Exhaustion on v2.1.0. Latency spike to 12000ms"
+    },
+    {
+      "timestamp": "2026-10-08T14:37:24.762463+00:00",
+      "service_id": "inventory-service",
+      "kind": "analysis",
+      "message": "Analysis (scenario-fallback): rollback -> v1.3.9. Memory Leak on v1.4.0. Pod restart loop count: 12"
+    },
+    {
+      "timestamp": "2026-10-08T14:37:25.457507+00:00",
+      "service_id": "vault-secrets-manager",
+      "kind": "analysis",
+      "message": "Analysis (scenario-fallback): unseal -> v1.12-unseal. Sealed Vault Instance on v1.13. Dynamic backend database credential retrieval blocked"
+    },
+    {
+      "timestamp": "2026-10-08T14:37:26.833033+00:00",
+      "service_id": "inventory-service",
+      "kind": "analysis",
+      "message": "Analysis (scenario-fallback): rollback -> v1.3.9. Memory Leak on v1.4.0. Pod restart loop count: 12"
+    },
+    {
+      "timestamp": "2026-10-08T14:37:29.056178+00:00",
+      "service_id": "vault-secrets-manager",
+      "kind": "analysis",
+      "message": "Analysis (scenario-fallback): unseal -> v1.12-unseal. Sealed Vault Instance on v1.13. Dynamic backend database credential retrieval blocked"
+    },
+    {
+      "timestamp": "2026-10-08T14:37:30.992040+00:00",
+      "service_id": "ingress-nginx-controller",
+      "kind": "analysis",
+      "message": "Analysis (scenario-fallback): cert_rotation -> v1.7.9-certfix. Expired TLS Certificate on v1.8.0. Browser security warnings blocking 100% of HTTPS traffic"
+    },
+    {
+      "timestamp": "2026-10-08T14:37:32.357286+00:00",
+      "service_id": "auth-service",
+      "kind": "analysis",
+      "message": "Analysis (scenario-fallback): rollback -> v3.0.1. Expired JWT Secret on v3.0.2. Global authentication failure (100% 401 response rate)"
+    },
+    {
+      "timestamp": "2026-10-08T14:37:33.633268+00:00",
+      "service_id": "payment-service",
+      "kind": "analysis",
+      "message": "Analysis (scenario-fallback): rollback -> v2.0.9. Connection Pool Exhaustion on v2.1.0. Latency spike to 12000ms"
+    },
+    {
+      "timestamp": "2026-10-08T14:45:28.506282+00:00",
+      "service_id": "payment-service",
+      "kind": "analysis",
+      "message": "Analysis (scenario-fallback): rollback -> v2.0.9. Connection Pool Exhaustion on v2.1.0. Latency spike to 12000ms"
+    },
+    {
+      "timestamp": "2026-10-08T15:04:12.165160+00:00",
+      "service_id": "payment-service",
+      "kind": "analysis",
+      "message": "Analysis (scenario-fallback): rollback -> v2.0.9. Connection Pool Exhaustion on v2.1.0. Latency spike to 12000ms"
+    },
+    {
+      "timestamp": "2026-10-08T15:11:28.171419+00:00",
+      "service_id": "payment-service",
+      "kind": "analysis",
+      "message": "Analysis (scenario-fallback): rollback -> v2.0.9. Connection Pool Exhaustion on v2.1.0. Latency spike to 12000ms"
+    },
+    {
+      "timestamp": "2026-10-08T15:11:30.732367+00:00",
+      "service_id": "payment-service",
+      "kind": "analysis",
+      "message": "Analysis (scenario-fallback): rollback -> v2.0.9. Connection Pool Exhaustion on v2.1.0. Latency spike to 12000ms"
+    },
+    {
+      "timestamp": "2026-10-08T15:11:32.092192+00:00",
+      "service_id": "inventory-service",
+      "kind": "analysis",
+      "message": "Analysis (scenario-fallback): rollback -> v1.3.9. Memory Leak on v1.4.0. Pod restart loop count: 12"
+    },
+    {
+      "timestamp": "2026-10-08T15:11:33.304854+00:00",
+      "service_id": "vault-secrets-manager",
+      "kind": "analysis",
+      "message": "Analysis (scenario-fallback): unseal -> v1.12-unseal. Sealed Vault Instance on v1.13. Dynamic backend database credential retrieval blocked"
+    },
+    {
+      "timestamp": "2026-10-08T15:11:34.187133+00:00",
+      "service_id": "ingress-nginx-controller",
+      "kind": "analysis",
+      "message": "Analysis (scenario-fallback): cert_rotation -> v1.7.9-certfix. Expired TLS Certificate on v1.8.0. Browser security warnings blocking 100% of HTTPS traffic"
+    },
+    {
+      "timestamp": "2026-10-08T15:11:34.986994+00:00",
+      "service_id": "auth-service",
+      "kind": "analysis",
+      "message": "Analysis (scenario-fallback): rollback -> v3.0.1. Expired JWT Secret on v3.0.2. Global authentication failure (100% 401 response rate)"
+    },
+    {
+      "timestamp": "2026-10-08T15:11:36.090541+00:00",
+      "service_id": "inventory-service",
+      "kind": "analysis",
+      "message": "Analysis (scenario-fallback): rollback -> v1.3.9. Memory Leak on v1.4.0. Pod restart loop count: 12"
+    },
+    {
+      "timestamp": "2026-10-08T15:11:42.435837+00:00",
+      "service_id": "vault-secrets-manager",
+      "kind": "analysis",
+      "message": "Analysis (scenario-fallback): unseal -> v1.12-unseal. Sealed Vault Instance on v1.13. Dynamic backend database credential retrieval blocked"
+    },
+    {
+      "timestamp": "2026-10-08T15:29:10.879385+00:00",
+      "service_id": "vault-secrets-manager",
+      "kind": "analysis",
+      "message": "Analysis (scenario-fallback): unseal -> v1.12-unseal. Sealed Vault Instance on v1.13. Dynamic backend database credential retrieval blocked"
+    },
+    {
+      "timestamp": "2026-10-08T15:29:17.506430+00:00",
+      "service_id": "vault-secrets-manager",
+      "kind": "analysis",
+      "message": "Analysis (scenario-fallback): unseal -> v1.12-unseal. Sealed Vault Instance on v1.13. Dynamic backend database credential retrieval blocked"
+    },
+    {
+      "timestamp": "2026-10-08T15:29:26.716192+00:00",
+      "service_id": "payment-service",
+      "kind": "analysis",
+      "message": "Analysis (scenario-fallback): rollback -> v2.0.9. Connection Pool Exhaustion on v2.1.0. Latency spike to 12000ms"
+    },
+    {
+      "timestamp": "2026-10-09T06:59:59.761489+00:00",
+      "service_id": "payment-service",
+      "kind": "analysis",
+      "message": "Analysis (scenario-fallback): rollback -> v2.0.9. Connection Pool Exhaustion on v2.1.0. Latency spike to 12000ms"
+    },
+    {
+      "timestamp": "2026-10-09T07:01:13.663451+00:00",
+      "service_id": "inventory-service",
+      "kind": "analysis",
+      "message": "Analysis (scenario-fallback): rollback -> v1.3.9. Memory Leak on v1.4.0. Pod restart loop count: 12"
+    },
+    {
+      "timestamp": "2026-10-09T07:01:14.209478+00:00",
+      "service_id": "vault-secrets-manager",
+      "kind": "analysis",
+      "message": "Analysis (scenario-fallback): unseal -> v1.12-unseal. Sealed Vault Instance on v1.13. Dynamic backend database credential retrieval blocked"
+    },
+    {
+      "timestamp": "2026-10-09T07:01:14.506666+00:00",
+      "service_id": "ingress-nginx-controller",
+      "kind": "analysis",
+      "message": "Analysis (scenario-fallback): cert_rotation -> v1.7.9-certfix. Expired TLS Certificate on v1.8.0. Browser security warnings blocking 100% of HTTPS traffic"
+    },
+    {
+      "timestamp": "2026-10-09T07:01:14.920696+00:00",
+      "service_id": "auth-service",
+      "kind": "analysis",
+      "message": "Analysis (scenario-fallback): rollback -> v3.0.1. Expired JWT Secret on v3.0.2. Global authentication failure (100% 401 response rate)"
+    },
+    {
+      "timestamp": "2026-10-09T07:01:17.654559+00:00",
+      "service_id": "payment-service",
+      "kind": "analysis",
+      "message": "Analysis (scenario-fallback): rollback -> v2.0.9. Connection Pool Exhaustion on v2.1.0. Latency spike to 12000ms"
+    },
+    {
+      "timestamp": "2026-10-09T07:06:36.085734+00:00",
+      "service_id": "payment-service",
+      "kind": "analysis",
+      "message": "Analysis (scenario-fallback): rollback -> v2.0.9. Connection Pool Exhaustion on v2.1.0. Latency spike to 12000ms"
+    },
+    {
+      "timestamp": "2026-10-09T07:11:05.118086+00:00",
+      "service_id": "payment-service",
+      "kind": "analysis",
+      "message": "Analysis (scenario-fallback): rollback -> v2.0.9. Connection Pool Exhaustion on v2.1.0. Latency spike to 12000ms"
+    },
+    {
+      "timestamp": "2026-10-09T07:13:48.393375+00:00",
+      "service_id": "inventory-service",
+      "kind": "analysis",
+      "message": "Analysis (scenario-fallback): rollback -> v1.3.9. Memory Leak on v1.4.0. Pod restart loop count: 12"
+    },
+    {
+      "timestamp": "2026-10-09T07:13:48.753695+00:00",
+      "service_id": "vault-secrets-manager",
+      "kind": "analysis",
+      "message": "Analysis (scenario-fallback): unseal -> v1.12-unseal. Sealed Vault Instance on v1.13. Dynamic backend database credential retrieval blocked"
+    },
+    {
+      "timestamp": "2026-10-09T07:13:49.487856+00:00",
+      "service_id": "payment-service",
+      "kind": "analysis",
+      "message": "Analysis (scenario-fallback): rollback -> v2.0.9. Connection Pool Exhaustion on v2.1.0. Latency spike to 12000ms"
+    },
+    {
+      "timestamp": "2026-10-09T07:15:43.130784+00:00",
+      "service_id": "payment-service",
+      "kind": "analysis",
+      "message": "Analysis (scenario-fallback): rollback -> v2.0.9. Connection Pool Exhaustion on v2.1.0. Latency spike to 12000ms"
+    },
+    {
+      "timestamp": "2026-10-09T07:34:09.611503+00:00",
+      "service_id": "payment-service",
+      "kind": "analysis",
+      "message": "Analysis (scenario-fallback): rollback -> v2.0.9. Connection Pool Exhaustion on v2.1.0. Latency spike to 12000ms"
+    },
+    {
+      "timestamp": "2026-10-09T07:43:54.054910+00:00",
+      "service_id": "payment-service",
+      "kind": "analysis",
+      "message": "Analysis (scenario-fallback): rollback -> v2.0.9. Connection Pool Exhaustion on v2.1.0. Latency spike to 12000ms"
+    },
+    {
+      "timestamp": "2026-10-09T10:02:10.809469+00:00",
+      "service_id": "payment-service",
+      "kind": "analysis",
+      "message": "Analysis (scenario-fallback): rollback -> v2.0.9. Connection Pool Exhaustion on v2.1.0. Latency spike to 12000ms"
+    },
+    {
+      "timestamp": "2026-10-09T10:11:23.701151+00:00",
+      "service_id": "vault-secrets-manager",
+      "kind": "analysis",
+      "message": "Analysis (scenario-fallback): unseal -> v1.12-unseal. Sealed Vault Instance on v1.13. Dynamic backend database credential retrieval blocked"
+    },
+    {
+      "timestamp": "2026-10-09T10:11:24.073598+00:00",
+      "service_id": "inventory-service",
+      "kind": "analysis",
+      "message": "Analysis (scenario-fallback): rollback -> v1.3.9. Memory Leak on v1.4.0. Pod restart loop count: 12"
+    },
+    {
+      "timestamp": "2026-10-09T10:11:24.348387+00:00",
+      "service_id": "payment-service",
+      "kind": "analysis",
+      "message": "Analysis (scenario-fallback): rollback -> v2.0.9. Connection Pool Exhaustion on v2.1.0. Latency spike to 12000ms"
+    },
+    {
+      "timestamp": "2026-10-09T13:37:25.984056+00:00",
+      "service_id": "payment-service",
+      "kind": "analysis",
+      "message": "Analysis (scenario-fallback): rollback -> v2.0.9. Connection Pool Exhaustion on v2.1.0. Latency spike to 12000ms"
+    },
+    {
+      "timestamp": "2026-10-09T13:42:24.122882+00:00",
+      "service_id": "payment-service",
+      "kind": "analysis",
+      "message": "Analysis (scenario-fallback): rollback -> v2.0.9. Connection Pool Exhaustion on v2.1.0. Latency spike to 12000ms"
+    },
+    {
+      "timestamp": "2026-10-09T13:42:41.239508+00:00",
+      "service_id": "payment-service",
+      "kind": "analysis",
+      "message": "Analysis (scenario-fallback): rollback -> v2.0.9. Connection Pool Exhaustion on v2.1.0. Latency spike to 12000ms"
+    },
+    {
+      "timestamp": "2026-10-09T13:42:52.634747+00:00",
+      "service_id": "payment-service",
+      "kind": "analysis",
+      "message": "Analysis (scenario-fallback): rollback -> v2.0.9. Connection Pool Exhaustion on v2.1.0. Latency spike to 12000ms"
+    },
+    {
+      "timestamp": "2026-10-09T13:43:02.345892+00:00",
+      "service_id": "inventory-service",
+      "kind": "analysis",
+      "message": "Analysis (scenario-fallback): rollback -> v1.3.9. Memory Leak on v1.4.0. Pod restart loop count: 12"
+    },
+    {
+      "timestamp": "2026-10-09T13:48:34.648936+00:00",
+      "service_id": "payment-service",
+      "kind": "analysis",
+      "message": "Analysis (scenario-fallback): rollback -> v2.0.9. Connection Pool Exhaustion on v2.1.0. Latency spike to 12000ms"
+    },
+    {
+      "timestamp": "2026-10-09T13:50:38.351592+00:00",
+      "service_id": "payment-service",
+      "kind": "analysis",
+      "message": "Analysis (scenario-fallback): rollback -> v2.0.9. Connection Pool Exhaustion on v2.1.0. Latency spike to 12000ms"
+    },
+    {
+      "timestamp": "2026-10-09T13:50:38.639101+00:00",
+      "service_id": "payment-service",
+      "kind": "analysis",
+      "message": "Analysis (scenario-fallback): rollback -> v2.0.9. Connection Pool Exhaustion on v2.1.0. Latency spike to 12000ms"
+    },
+    {
+      "timestamp": "2026-10-09T13:51:08.915896+00:00",
+      "service_id": "payment-service",
+      "kind": "analysis",
+      "message": "Analysis (scenario-fallback): rollback -> v2.0.9. Connection Pool Exhaustion on v2.1.0. Latency spike to 12000ms"
+    },
+    {
+      "timestamp": "2026-10-09T13:52:13.961516+00:00",
+      "service_id": "payment-service",
+      "kind": "analysis",
+      "message": "Analysis (scenario-fallback): rollback -> v2.0.9. Connection Pool Exhaustion on v2.1.0. Latency spike to 12000ms"
+    },
+    {
+      "timestamp": "2026-10-09T13:56:03.490783+00:00",
+      "service_id": "payment-service",
+      "kind": "analysis",
+      "message": "Analysis (scenario-fallback): rollback -> v2.0.9. Connection Pool Exhaustion on v2.1.0. Latency spike to 12000ms"
+    },
+    {
+      "timestamp": "2026-10-09T13:56:54.060352+00:00",
+      "service_id": "payment-service",
+      "kind": "analysis",
+      "message": "Analysis (scenario-fallback): rollback -> v2.0.9. Connection Pool Exhaustion on v2.1.0. Latency spike to 12000ms"
+    },
+    {
+      "timestamp": "2026-10-09T13:58:10.243968+00:00",
+      "service_id": "payment-service",
+      "kind": "analysis",
+      "message": "Analysis (scenario-fallback): rollback -> v2.0.9. Connection Pool Exhaustion on v2.1.0. Latency spike to 12000ms"
+    },
+    {
+      "timestamp": "2026-10-09T13:58:11.791383+00:00",
+      "service_id": "payment-service",
+      "kind": "analysis",
+      "message": "Analysis (scenario-fallback): rollback -> v2.0.9. Connection Pool Exhaustion on v2.1.0. Latency spike to 12000ms"
+    },
+    {
+      "timestamp": "2026-10-09T13:58:13.120282+00:00",
+      "service_id": "payment-service",
+      "kind": "analysis",
+      "message": "Analysis (scenario-fallback): rollback -> v2.0.9. Connection Pool Exhaustion on v2.1.0. Latency spike to 12000ms"
+    },
+    {
+      "timestamp": "2026-10-09T13:58:13.827039+00:00",
+      "service_id": "payment-service",
+      "kind": "analysis",
+      "message": "Analysis (scenario-fallback): rollback -> v2.0.9. Connection Pool Exhaustion on v2.1.0. Latency spike to 12000ms"
+    },
+    {
+      "timestamp": "2026-10-09T13:58:14.374176+00:00",
+      "service_id": "payment-service",
+      "kind": "analysis",
+      "message": "Analysis (scenario-fallback): rollback -> v2.0.9. Connection Pool Exhaustion on v2.1.0. Latency spike to 12000ms"
+    },
+    {
+      "timestamp": "2026-10-09T13:58:14.676953+00:00",
+      "service_id": "payment-service",
+      "kind": "analysis",
+      "message": "Analysis (scenario-fallback): rollback -> v2.0.9. Connection Pool Exhaustion on v2.1.0. Latency spike to 12000ms"
+    },
+    {
+      "timestamp": "2026-10-09T13:58:14.908343+00:00",
+      "service_id": "payment-service",
+      "kind": "analysis",
+      "message": "Analysis (scenario-fallback): rollback -> v2.0.9. Connection Pool Exhaustion on v2.1.0. Latency spike to 12000ms"
+    },
+    {
+      "timestamp": "2026-10-09T13:58:15.123177+00:00",
+      "service_id": "payment-service",
+      "kind": "analysis",
+      "message": "Analysis (scenario-fallback): rollback -> v2.0.9. Connection Pool Exhaustion on v2.1.0. Latency spike to 12000ms"
+    },
+    {
+      "timestamp": "2026-10-09T13:58:15.290779+00:00",
+      "service_id": "payment-service",
+      "kind": "analysis",
+      "message": "Analysis (scenario-fallback): rollback -> v2.0.9. Connection Pool Exhaustion on v2.1.0. Latency spike to 12000ms"
+    },
+    {
+      "timestamp": "2026-10-09T13:58:15.479000+00:00",
+      "service_id": "payment-service",
+      "kind": "analysis",
+      "message": "Analysis (scenario-fallback): rollback -> v2.0.9. Connection Pool Exhaustion on v2.1.0. Latency spike to 12000ms"
+    },
+    {
+      "timestamp": "2026-10-09T13:58:15.691534+00:00",
+      "service_id": "payment-service",
+      "kind": "analysis",
+      "message": "Analysis (scenario-fallback): rollback -> v2.0.9. Connection Pool Exhaustion on v2.1.0. Latency spike to 12000ms"
+    },
+    {
+      "timestamp": "2026-10-09T13:58:15.886033+00:00",
+      "service_id": "payment-service",
+      "kind": "analysis",
+      "message": "Analysis (scenario-fallback): rollback -> v2.0.9. Connection Pool Exhaustion on v2.1.0. Latency spike to 12000ms"
+    },
+    {
+      "timestamp": "2026-10-09T13:58:16.120518+00:00",
+      "service_id": "payment-service",
+      "kind": "analysis",
+      "message": "Analysis (scenario-fallback): rollback -> v2.0.9. Connection Pool Exhaustion on v2.1.0. Latency spike to 12000ms"
+    },
+    {
+      "timestamp": "2026-10-09T13:58:16.340908+00:00",
+      "service_id": "payment-service",
+      "kind": "analysis",
+      "message": "Analysis (scenario-fallback): rollback -> v2.0.9. Connection Pool Exhaustion on v2.1.0. Latency spike to 12000ms"
+    },
+    {
+      "timestamp": "2026-10-09T13:58:16.567576+00:00",
+      "service_id": "payment-service",
+      "kind": "analysis",
+      "message": "Analysis (scenario-fallback): rollback -> v2.0.9. Connection Pool Exhaustion on v2.1.0. Latency spike to 12000ms"
+    },
+    {
+      "timestamp": "2026-10-09T13:58:16.780937+00:00",
+      "service_id": "payment-service",
+      "kind": "analysis",
+      "message": "Analysis (scenario-fallback): rollback -> v2.0.9. Connection Pool Exhaustion on v2.1.0. Latency spike to 12000ms"
+    },
+    {
+      "timestamp": "2026-10-09T13:58:16.966348+00:00",
+      "service_id": "payment-service",
+      "kind": "analysis",
+      "message": "Analysis (scenario-fallback): rollback -> v2.0.9. Connection Pool Exhaustion on v2.1.0. Latency spike to 12000ms"
+    },
+    {
+      "timestamp": "2026-10-09T13:58:17.172632+00:00",
+      "service_id": "payment-service",
+      "kind": "analysis",
+      "message": "Analysis (scenario-fallback): rollback -> v2.0.9. Connection Pool Exhaustion on v2.1.0. Latency spike to 12000ms"
+    },
+    {
+      "timestamp": "2026-10-09T13:58:17.400428+00:00",
+      "service_id": "payment-service",
+      "kind": "analysis",
+      "message": "Analysis (scenario-fallback): rollback -> v2.0.9. Connection Pool Exhaustion on v2.1.0. Latency spike to 12000ms"
+    },
+    {
+      "timestamp": "2026-10-09T13:58:17.624957+00:00",
+      "service_id": "payment-service",
+      "kind": "analysis",
+      "message": "Analysis (scenario-fallback): rollback -> v2.0.9. Connection Pool Exhaustion on v2.1.0. Latency spike to 12000ms"
+    },
+    {
+      "timestamp": "2026-10-09T13:58:17.871197+00:00",
+      "service_id": "payment-service",
+      "kind": "analysis",
+      "message": "Analysis (scenario-fallback): rollback -> v2.0.9. Connection Pool Exhaustion on v2.1.0. Latency spike to 12000ms"
+    },
+    {
+      "timestamp": "2026-10-09T13:58:18.198234+00:00",
+      "service_id": "payment-service",
+      "kind": "analysis",
+      "message": "Analysis (scenario-fallback): rollback -> v2.0.9. Connection Pool Exhaustion on v2.1.0. Latency spike to 12000ms"
+    },
+    {
+      "timestamp": "2026-10-09T13:58:18.409583+00:00",
+      "service_id": "payment-service",
+      "kind": "analysis",
+      "message": "Analysis (scenario-fallback): rollback -> v2.0.9. Connection Pool Exhaustion on v2.1.0. Latency spike to 12000ms"
+    },
+    {
+      "timestamp": "2026-10-09T13:58:18.848523+00:00",
+      "service_id": "payment-service",
+      "kind": "analysis",
+      "message": "Analysis (scenario-fallback): rollback -> v2.0.9. Connection Pool Exhaustion on v2.1.0. Latency spike to 12000ms"
+    },
+    {
+      "timestamp": "2026-10-09T13:58:31.711369+00:00",
+      "service_id": "payment-service",
+      "kind": "analysis",
+      "message": "Analysis (scenario-fallback): rollback -> v2.0.9. Connection Pool Exhaustion on v2.1.0. Latency spike to 12000ms"
+    },
+    {
+      "timestamp": "2026-10-09T14:03:27.555710+00:00",
+      "service_id": "payment-service",
+      "kind": "analysis",
+      "message": "Analysis (scenario-fallback): rollback -> v2.0.9. Connection Pool Exhaustion on v2.1.0. Latency spike to 12000ms"
+    },
+    {
+      "timestamp": "2026-10-09T14:04:28.914232+00:00",
+      "service_id": "payment-service",
+      "kind": "analysis",
+      "message": "Analysis (scenario-fallback): rollback -> v2.0.9. Connection Pool Exhaustion on v2.1.0. Latency spike to 12000ms"
+    },
+    {
+      "timestamp": "2026-10-09T14:05:43.696714+00:00",
+      "service_id": "payment-service",
+      "kind": "analysis",
+      "message": "Analysis (scenario-fallback): rollback -> v2.0.9. Connection Pool Exhaustion on v2.1.0. Latency spike to 12000ms"
+    },
+    {
+      "timestamp": "2026-10-09T14:05:45.360471+00:00",
+      "service_id": "inventory-service",
+      "kind": "analysis",
+      "message": "Analysis (scenario-fallback): rollback -> v1.3.9. Memory Leak on v1.4.0. Pod restart loop count: 12"
+    },
+    {
+      "timestamp": "2026-10-09T14:07:18.296254+00:00",
+      "service_id": "payment-service",
+      "kind": "analysis",
+      "message": "Analysis (scenario-fallback): rollback -> v2.0.9. Connection Pool Exhaustion on v2.1.0. Latency spike to 12000ms"
+    },
+    {
+      "timestamp": "2026-10-09T14:07:22.493091+00:00",
+      "service_id": "vault-secrets-manager",
+      "kind": "analysis",
+      "message": "Analysis (scenario-fallback): unseal -> v1.12-unseal. Sealed Vault Instance on v1.13. Dynamic backend database credential retrieval blocked"
+    },
+    {
+      "timestamp": "2026-10-09T14:07:23.820939+00:00",
+      "service_id": "inventory-service",
+      "kind": "analysis",
+      "message": "Analysis (scenario-fallback): rollback -> v1.3.9. Memory Leak on v1.4.0. Pod restart loop count: 12"
+    },
+    {
+      "timestamp": "2026-10-09T14:07:57.861008+00:00",
+      "service_id": "inventory-service",
+      "kind": "analysis",
+      "message": "Analysis (scenario-fallback): rollback -> v1.3.9. Memory Leak on v1.4.0. Pod restart loop count: 12"
+    },
+    {
+      "timestamp": "2026-10-09T14:11:21.878819+00:00",
+      "service_id": "inventory-service",
+      "kind": "analysis",
+      "message": "Analysis (scenario-fallback): rollback -> v1.3.9. Memory Leak on v1.4.0. Pod restart loop count: 12"
+    },
+    {
+      "timestamp": "2026-10-09T14:12:38.042212+00:00",
+      "service_id": "payment-service",
+      "kind": "analysis",
+      "message": "Analysis (scenario-fallback): rollback -> v2.0.9. Connection Pool Exhaustion on v2.1.0. Latency spike to 12000ms"
+    },
+    {
+      "timestamp": "2026-10-09T14:19:44.754537+00:00",
+      "service_id": "payment-service",
+      "kind": "analysis",
+      "message": "Analysis (scenario-fallback): rollback -> v2.0.9. Connection Pool Exhaustion on v2.1.0. Latency spike to 12000ms"
+    },
+    {
+      "timestamp": "2026-10-09T14:20:03.801247+00:00",
+      "service_id": "inventory-service",
+      "kind": "analysis",
+      "message": "Analysis (scenario-fallback): rollback -> v1.3.9. Memory Leak on v1.4.0. Pod restart loop count: 12"
+    },
+    {
+      "timestamp": "2026-10-09T14:20:05.175285+00:00",
+      "service_id": "vault-secrets-manager",
+      "kind": "analysis",
+      "message": "Analysis (scenario-fallback): unseal -> v1.12-unseal. Sealed Vault Instance on v1.13. Dynamic backend database credential retrieval blocked"
+    },
+    {
+      "timestamp": "2026-10-09T14:20:05.945235+00:00",
+      "service_id": "ingress-nginx-controller",
+      "kind": "analysis",
+      "message": "Analysis (scenario-fallback): cert_rotation -> v1.7.9-certfix. Expired TLS Certificate on v1.8.0. Browser security warnings blocking 100% of HTTPS traffic"
+    },
+    {
+      "timestamp": "2026-10-09T14:20:07.078590+00:00",
+      "service_id": "auth-service",
+      "kind": "analysis",
+      "message": "Analysis (scenario-fallback): rollback -> v3.0.1. Expired JWT Secret on v3.0.2. Global authentication failure (100% 401 response rate)"
+    },
+    {
+      "timestamp": "2026-10-09T14:20:08.722166+00:00",
+      "service_id": "payment-service",
+      "kind": "analysis",
+      "message": "Analysis (scenario-fallback): rollback -> v2.0.9. Connection Pool Exhaustion on v2.1.0. Latency spike to 12000ms"
+    },
+    {
+      "timestamp": "2026-10-09T14:20:45.406498+00:00",
+      "service_id": "payment-service",
+      "kind": "analysis",
+      "message": "Analysis (scenario-fallback): rollback -> v2.0.9. Connection Pool Exhaustion on v2.1.0. Latency spike to 12000ms"
+    },
+    {
+      "timestamp": "2026-10-09T14:21:19.427785+00:00",
+      "service_id": "payment-service",
+      "kind": "analysis",
+      "message": "Analysis (scenario-fallback): rollback -> v2.0.9. Connection Pool Exhaustion on v2.1.0. Latency spike to 12000ms"
+    },
+    {
+      "timestamp": "2026-10-09T14:21:24.905894+00:00",
+      "service_id": "ingress-nginx-controller",
+      "kind": "analysis",
+      "message": "Analysis (scenario-fallback): cert_rotation -> v1.7.9-certfix. Expired TLS Certificate on v1.8.0. Browser security warnings blocking 100% of HTTPS traffic"
+    },
+    {
+      "timestamp": "2026-10-09T14:21:26.876820+00:00",
+      "service_id": "ingress-nginx-controller",
+      "kind": "analysis",
+      "message": "Analysis (scenario-fallback): cert_rotation -> v1.7.9-certfix. Expired TLS Certificate on v1.8.0. Browser security warnings blocking 100% of HTTPS traffic"
+    },
+    {
+      "timestamp": "2026-10-09T14:21:30.691887+00:00",
+      "service_id": "payment-service",
+      "kind": "analysis",
+      "message": "Analysis (scenario-fallback): rollback -> v2.0.9. Connection Pool Exhaustion on v2.1.0. Latency spike to 12000ms"
+    },
+    {
+      "timestamp": "2026-10-09T14:23:49.651486+00:00",
+      "service_id": "payment-service",
+      "kind": "analysis",
+      "message": "Analysis (scenario-fallback): rollback -> v2.0.9. Connection Pool Exhaustion on v2.1.0. Latency spike to 12000ms"
+    },
+    {
+      "timestamp": "2026-10-09T14:26:44.695119+00:00",
+      "service_id": "payment-service",
+      "kind": "analysis",
+      "message": "Analysis (scenario-fallback): rollback -> v2.0.9. Connection Pool Exhaustion on v2.1.0. Latency spike to 12000ms"
+    },
+    {
+      "timestamp": "2026-10-09T14:37:39.924991+00:00",
+      "service_id": "payment-service",
+      "kind": "analysis",
+      "message": "Analysis (scenario-fallback): rollback -> v2.0.9. Connection Pool Exhaustion on v2.1.0. Latency spike to 12000ms"
+    },
+    {
+      "timestamp": "2026-10-09T14:43:33.051592+00:00",
+      "service_id": "payment-service",
+      "kind": "analysis",
+      "message": "Analysis (scenario-fallback): rollback -> v2.0.9. Connection Pool Exhaustion on v2.1.0. Latency spike to 12000ms"
+    },
+    {
+      "timestamp": "2026-10-09T14:50:27.453621+00:00",
+      "service_id": "payment-service",
+      "kind": "analysis",
+      "message": "Analysis (scenario-fallback): rollback -> v2.0.9. Connection Pool Exhaustion on v2.1.0. Latency spike to 12000ms"
+    },
+    {
+      "timestamp": "2026-10-09T14:50:58.962130+00:00",
+      "service_id": "payment-service",
+      "kind": "analysis",
+      "message": "Analysis (scenario-fallback): rollback -> v2.0.9. Connection Pool Exhaustion on v2.1.0. Latency spike to 12000ms"
+    },
+    {
+      "timestamp": "2026-10-17T15:48:30.573491+00:00",
+      "service_id": "payment-service",
+      "kind": "analysis",
+      "message": "Analysis (scenario-fallback): rollback -> v2.0.9. Connection Pool Exhaustion on v2.1.0. Latency spike to 12000ms"
+    },
+    {
+      "timestamp": "2026-10-17T15:49:00.621677+00:00",
+      "service_id": "payment-service",
+      "kind": "analysis",
+      "message": "Analysis (scenario-fallback): rollback -> v2.0.9. Connection Pool Exhaustion on v2.1.0. Latency spike to 12000ms"
+    },
+    {
+      "timestamp": "2026-10-17T15:49:21.843130+00:00",
+      "service_id": "payment-service",
+      "kind": "analysis",
+      "message": "Analysis (scenario-fallback): rollback -> v2.0.9. Connection Pool Exhaustion on v2.1.0. Latency spike to 12000ms"
+    },
+    {
+      "timestamp": "2026-10-17T15:49:31.284916+00:00",
+      "service_id": "payment-service",
+      "kind": "analysis",
+      "message": "Analysis (scenario-fallback): rollback -> v2.0.9. Connection Pool Exhaustion on v2.1.0. Latency spike to 12000ms"
+    },
+    {
+      "timestamp": "2026-10-17T15:53:35.182793+00:00",
+      "service_id": "payment-service",
+      "kind": "analysis",
+      "message": "Analysis (scenario-fallback): rollback -> v2.0.9. Connection Pool Exhaustion on v2.1.0. Latency spike to 12000ms"
+    }
+  ]
+}
