@@ -51,8 +51,24 @@ def handle_alexa(body: dict, agent) -> dict:
     return _say(_HELP, attributes, end=False)
 
 
+def _resolve(spoken: str) -> str | None:
+    found = _named_service(spoken, _SERVICES)
+    if found:
+        return found
+    words = ["".join(ch for ch in word if ch.isalnum()) for word in spoken.lower().replace("-", " ").split()]
+    words = [word for word in words if len(word) >= 4]
+    hits = []
+    for service_id in _SERVICES:
+        token = "".join(ch for ch in service_id.lower() if ch.isalnum())
+        if any(token.startswith(word) for word in words):
+            hits.append(service_id)
+    if len(hits) == 1:
+        return hits[0]
+    return None
+
+
 def _whats_wrong(agent, spoken: str, attributes: dict) -> dict:
-    service_id = _named_service(spoken, _SERVICES) if spoken else None
+    service_id = _resolve(spoken) if spoken else None
     if not service_id:
         return _say("Name a service on this board. For example, what's wrong with payments.", attributes, end=False)
     result = agent.analyze_incident(service_id)
