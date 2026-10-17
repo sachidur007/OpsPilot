@@ -1,0 +1,50 @@
+{
+  "interactionModel": {
+    "languageModel": {
+      "invocationName": "ops pilot",
+      "intents": [
+        {
+          "name": "AMAZON.CancelIntent",
+          "samples": []
+        },
+        {
+          "name": "AMAZON.HelpIntent",
+          "samples": []
+        },
+        {
+          "name": "AMAZON.StopIntent",
+          "samples": []
+        },
+        {
+          "name": "WhatsWrongIntent",
+          "slots": [
+            {
+              "name": "service",
+              "type": "AMAZON.SearchQuery"
+            }
+          ],
+          "samples": [
+            "what's wrong with {service}",
+            "what is wrong with {service}",
+            "whats wrong with {service}"
+          ]
+        },
+        {
+          "name": "ApproveIntent",
+          "samples": [
+            "approve",
+            "approve the fix"
+          ]
+        },
+        {
+          "name": "RejectIntent",
+          "samples": [
+            "reject",
+            "reject the fix"
+          ]
+        }
+      ],
+      "types": []
+    }
+  }
+}

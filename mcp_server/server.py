@@ -1,10 +1,11 @@
 from contextlib import asynccontextmanager
 
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import Response
 from pydantic import BaseModel
 
+from agent.alexa_skill import handle_alexa
 from agent.voice import synthesize_speech
 
 from agent.opspilot_agent import OpsPilotAgent
@@ -243,6 +244,12 @@ def agent_discuss(req: DiscussRequest):
         "scope": "all" if route.get("moved") else "service",
         "source": (result.get("analysis") or {}).get("source"),
     }
+
+
+@app.post("/alexa")
+async def alexa_endpoint(request: Request):
+    body = await request.json()
+    return handle_alexa(body, agent)
 
 
 @app.post("/agent/speak")
