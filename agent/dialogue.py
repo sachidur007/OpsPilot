@@ -49,6 +49,11 @@ def answer(service_id: str | None, question: str) -> str | None:
             from simulator.main import explain_decision
 
             return explain_decision(anchor, asked)[:1800]
+    if kind == "finding":
+        from simulator.main import _named_service, _read
+
+        if _named_service(asked, _read()["services"]):
+            return None
     reply = _ask(
         "You are OpsPilot. Speak in short ordinary sentences to someone who may know nothing about software. "
         "Say you, not they. Use only the facts given. Do not invent buttons, numbers, or versions.",
@@ -73,8 +78,9 @@ def _prompt(kind: str, question: str, pack: dict) -> str:
     elif kind == "product":
         facts = (
             "The board, the chat, and the fleet work. "
-            "Amazon Bedrock is blocked, so when you look up a service the source is Scenario fallback. "
-            "The contest track is Alexa+, and that voice skill is not connected yet. This chat is the brain it will use."
+            "A service lookup calls Amazon Bedrock. If Bedrock is unavailable the source line says Scenario fallback. "
+            "The board is the Alexa+ client: it calls the MCP server with initialize, tools/list, and tools/call. "
+            "Alexa uses this same agent for what's wrong, approve, reject, and tell me."
         )
         task = "Say how the product is coming along. Do not mention a broken service."
     elif kind == "decision":

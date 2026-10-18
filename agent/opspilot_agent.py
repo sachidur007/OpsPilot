@@ -108,6 +108,7 @@ class OpsPilotAgent:
             analysis = _BEDROCK_POOL.submit(self._bedrock_analysis, service_id, telemetry).result(timeout=8)
             analysis["source"] = "bedrock"
         except (Exception, FuturesTimeout) as exc:
+            detail = " ".join(str(exc).split())
             analysis = {
                 "root_cause": telemetry.get("root_cause")
                 or metrics.get("impact_summary")
@@ -115,7 +116,7 @@ class OpsPilotAgent:
                 "recommended_action": metrics.get("recommended_action") or "rollback",
                 "target_version_or_value": metrics.get("target_version") or telemetry.get("target"),
                 "source": "scenario-fallback",
-                "fallback_reason": str(exc.__class__.__name__),
+                "fallback_reason": (detail or exc.__class__.__name__)[:240],
             }
         if analysis.get("recommended_action") not in ACTIONS:
             analysis["recommended_action"] = metrics.get("recommended_action") or "rollback"

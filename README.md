@@ -41,6 +41,8 @@ On the board, Talk about this speaks the open incident. Approve, Reject, and Ove
 
 The finding names its source. **Bedrock** means Claude reasoned over the telemetry. **Scenario fallback** means Bedrock was unavailable and the answer came from the scenario on that service. The badge stays visible either way.
 
+Set `BEDROCK_MODEL_ID` in `.env` to a Claude model the account can call. The file stays off git. Use an IAM user, not the root account. The hosted agent sends request spans to the CloudWatch log group `/opspilot/traces`.
+
 ## Alexa+
 
 The skill package is in `alexa/skill-package/`. Import it in the Alexa developer console. The endpoint must be a public HTTPS URL ending in `/alexa`. Amazon cannot call `127.0.0.1`.
@@ -53,11 +55,14 @@ sh scripts/alexa_tunnel.sh
 
 Paste the printed `https://…` host, plus `/alexa`, into the skill endpoint. Set `ALEXA_SKILL_ID` to the skill id from the console before starting the agent if you want the endpoint to accept only that skill.
 
+The board is the Alexa+ client. On investigate it calls `POST /protocol/` with `initialize`, `tools/list`, and `tools/call` for `get_service_status`. That MCP server speaks protocol `2025-11-25`. The public tool list is read-only: `get_fleet`, `get_service_status`, and `verify_recovery`. Approve and reject stay on the agent routes.
+
 The skill calls only these existing routes, through `POST /alexa`:
 
 - `POST /agent/analyze`
 - `POST /agent/remediate`
 - `POST /agent/reject`
+- `POST /agent/discuss` for “tell me …”
 
 ## License
 

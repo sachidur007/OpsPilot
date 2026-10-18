@@ -42,6 +42,20 @@
             "reject",
             "reject the fix"
           ]
+        },
+        {
+          "name": "DiscussIntent",
+          "slots": [
+            {
+              "name": "question",
+              "type": "AMAZON.SearchQuery"
+            }
+          ],
+          "samples": [
+            "how's the fleet",
+            "what is going on",
+            "tell me {question}"
+          ]
         }
       ],
       "types": []

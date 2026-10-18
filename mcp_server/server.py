@@ -1,3 +1,4 @@
+import json
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI, Request
@@ -5,7 +6,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import Response
 from pydantic import BaseModel
 
-from agent.alexa_skill import handle_alexa
+from agent.alexa_skill import handle_alexa, request_allowed
+from agent.telemetry import tracer
 from agent.voice import synthesize_speech
 
 from agent.opspilot_agent import OpsPilotAgent
@@ -46,6 +48,16 @@ app.add_middleware(
 )
 
 app.mount("/protocol", protocol_app)
+
+
+@app.middleware("http")
+async def trace_http(request: Request, call_next):
+    with tracer.start_as_current_span(f"{request.method} {request.url.path}") as span:
+        span.set_attribute("http.method", request.method)
+        span.set_attribute("http.target", request.url.path)
+        response = await call_next(request)
+        span.set_attribute("http.status_code", response.status_code)
+        return response
 
 
 class RollbackRequest(BaseModel):
@@ -248,8 +260,18 @@ def agent_discuss(req: DiscussRequest):
 
 @app.post("/alexa")
 async def alexa_endpoint(request: Request):
-    body = await request.json()
-    return handle_alexa(body, agent)
+    raw = await request.body()
+    client = request.client.host if request.client else ""
+    if not request_allowed(request.headers, raw, client):
+        return {
+            "version": "1.0",
+            "sessionAttributes": {},
+            "response": {
+                "outputSpeech": {"type": "PlainText", "text": "This request is not from Alexa."},
+                "shouldEndSession": True,
+            },
+        }
+    return handle_alexa(json.loads(raw), agent)
 
 
 @app.post("/agent/speak")

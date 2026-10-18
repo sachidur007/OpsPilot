@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { ACTIONS, agentClient } from "@/lib/api";
+import { investigateOverMcp } from "@/lib/mcp";
 import type { CommandEntry, FleetService, FleetSnapshot } from "@/lib/types";
 import { speakHyderabad, stopSpeaking } from "@/lib/voice";
 
@@ -90,7 +91,10 @@ export default function Home() {
     setError(null);
     setOffline(false);
     setSelected((current) => {
-      const names = data.active_incidents.map((item) => item.service_id);
+      const names = [
+        ...data.active_incidents.map((item) => item.service_id),
+        ...data.healthy_fleet.map((item) => item.service_id),
+      ];
       if (prefer && names.includes(prefer)) return prefer;
       if (current && names.includes(current)) return current;
       return data.active_incidents[0]?.service_id ?? null;
@@ -111,7 +115,12 @@ export default function Home() {
     return () => window.clearInterval(id);
   }, []);
 
-  const incident = fleet?.active_incidents.find((item) => item.service_id === selected) ?? null;
+  const focus =
+    fleet?.active_incidents.find((item) => item.service_id === selected) ??
+    fleet?.healthy_fleet.find((item) => item.service_id === selected) ??
+    null;
+  const incident = focus && focus.status !== "HEALTHY" ? focus : null;
+  const healthyFocus = focus && focus.status === "HEALTHY" ? focus : null;
 
   useEffect(() => {
     if (!incident) return;
@@ -122,26 +131,37 @@ export default function Home() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [incident?.service_id]);
 
+  const fleetRef = useRef(fleet);
+  fleetRef.current = fleet;
+
   useEffect(() => {
     if (!selected) return;
+    const current = fleetRef.current;
+    const active = current?.active_incidents.some((item) => item.service_id === selected);
+    if (current && !active) return;
     const token = ++analyzeToken.current;
+    const serviceId = selected;
     setAnalyzing(true);
-    agentClient
-      .analyze(selected)
-      .then(async () => {
-        if (analyzeToken.current !== token) return;
-        const data = await loadFleet(selected);
-        if (analyzeToken.current !== token) return;
-        void data;
-      })
-      .catch(() => {
-        if (analyzeToken.current === token) {
-          setAnalyzing(false);
+    void (async () => {
+      try {
+        const notes = await investigateOverMcp(serviceId);
+        for (const note of notes) {
+          const saved = await agentClient.note(serviceId, "action", "agent", note);
+          if (analyzeToken.current === token) setRecord(saved.record);
         }
-      })
-      .finally(() => {
+      } catch {
+        if (analyzeToken.current === token) setError("The MCP tool call did not finish.");
+      }
+      try {
+        await agentClient.analyze(serviceId);
+        if (analyzeToken.current !== token) return;
+        await loadFleet(serviceId);
+      } catch {
         if (analyzeToken.current === token) setAnalyzing(false);
-      });
+      } finally {
+        if (analyzeToken.current === token) setAnalyzing(false);
+      }
+    })();
   }, [selected, loadFleet]);
 
   const healthyGroups = useMemo(() => {
@@ -532,11 +552,16 @@ export default function Home() {
                 <div className="layer" key={label}>
                   <p>{label}</p>
                   {items.map((item) => (
-                    <div className="fleet-row" key={item.service_id}>
+                    <button
+                      className={selected === item.service_id ? "fleet-row on" : "fleet-row"}
+                      key={item.service_id}
+                      type="button"
+                      onClick={() => setSelected(item.service_id)}
+                    >
                       <i />
                       <b>{item.service_id}</b>
                       <small>{item.version}</small>
-                    </div>
+                    </button>
                   ))}
                 </div>
               ))}
@@ -544,7 +569,32 @@ export default function Home() {
         </section>
 
         <section className="panel work">
-          {!incident ? (
+          {healthyFocus ? (
+            <div className="work-scroll">
+              <div className="identity">
+                <div className="row-top">
+                  <p className="kicker">{healthyFocus.layer_label}</p>
+                  <span className="badge sev3">HEALTHY</span>
+                </div>
+                <h2>{healthyFocus.service_id}</h2>
+                <p>No fix is waiting.</p>
+              </div>
+              <div className="facts">
+                <div>
+                  <span>Error rate</span>
+                  <b>0.00%</b>
+                </div>
+                <div>
+                  <span>Live version</span>
+                  <b>{healthyFocus.version}</b>
+                </div>
+                <div>
+                  <span>Status</span>
+                  <b>{healthyFocus.status}</b>
+                </div>
+              </div>
+            </div>
+          ) : !incident ? (
             <div className="blank">
               <p className="kicker">No incident open</p>
               <h2>Choose a service from Open</h2>

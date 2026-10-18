@@ -793,14 +793,19 @@ def store_analysis(service_id: str, analysis: dict) -> dict:
             "target_version_or_value": target,
             "source": analysis.get("source", "bedrock"),
         }
+        if analysis.get("fallback_reason"):
+            service["proposal"]["fallback_reason"] = str(analysis["fallback_reason"])[:240]
         service["recommended_action"] = action
         service["target"] = target
         service["updated_at"] = _now()
+        note = f"Analysis ({service['proposal']['source']}): {action} -> {target}. {service['proposal']['root_cause']}"
+        if service["proposal"].get("fallback_reason"):
+            note += f" Fallback: {service['proposal']['fallback_reason']}"
         _append_timeline(
             state,
             service_id,
             "analysis",
-            f"Analysis ({service['proposal']['source']}): {action} -> {target}. {service['proposal']['root_cause']}",
+            note[:500],
         )
         _write(state)
         return _present(service)

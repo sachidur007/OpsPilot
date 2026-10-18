@@ -1,0 +1,13 @@
+venv
+.venv
+.voice-venv
+.dialogue-venv
+web_ui/node_modules
+web_ui/.next
+.git
+demo
+agent/voice_data
+**/.env
+simulator/data/command_record.json
+**/__pycache__
+**/*.pyc

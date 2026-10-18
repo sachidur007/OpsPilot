@@ -5,3 +5,6 @@ boto3
 pydantic
 requests
 python-dotenv
+cryptography
+opentelemetry-api
+opentelemetry-sdk

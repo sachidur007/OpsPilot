@@ -2,8 +2,11 @@
 
 from __future__ import annotations
 
+import base64
 import os
 from datetime import datetime, timezone
+from urllib.parse import urlparse
+from urllib.request import urlopen
 
 from simulator.main import _named_service, append_record
 from simulator.scenarios import SCENARIOS
@@ -11,8 +14,81 @@ from simulator.scenarios import SCENARIOS
 _SERVICES = {item["service"]: {} for item in SCENARIOS}
 _HELP = (
     "Say what's wrong with payments. "
-    "Then say approve to run the suggested fix, or reject to leave it in triage."
+    "Then say approve to run the suggested fix, or reject to leave it in triage. "
+    "Say tell me how's the fleet to ask something else."
 )
+
+
+_CERTS: dict[str, bytes] = {}
+
+
+def request_allowed(headers, body: bytes, client_host: str, fetch_cert=None) -> bool:
+    """Unsigned calls are only for this machine. Signed calls must match Amazon's certificate."""
+    signature = _header(headers, "Signature")
+    cert_url = _header(headers, "SignatureCertChainUrl")
+    if not signature and not cert_url:
+        return _direct_localhost(headers, client_host)
+    if not signature or not cert_url or not _valid_cert_url(cert_url):
+        return False
+    try:
+        pem = (fetch_cert or _cached_cert)(cert_url)
+        return _signature_matches(pem, signature, body)
+    except Exception:
+        return False
+
+
+def _direct_localhost(headers, client_host: str) -> bool:
+    if client_host not in {"127.0.0.1", "::1"}:
+        return False
+    return not (_header(headers, "X-Forwarded-For") or _header(headers, "Forwarded"))
+
+
+def _header(headers, name: str) -> str:
+    if headers is None:
+        return ""
+    getter = getattr(headers, "get", None)
+    if getter is None:
+        return ""
+    return (getter(name) or getter(name.lower()) or "").strip()
+
+
+def _valid_cert_url(url: str) -> bool:
+    parsed = urlparse(url)
+    path = parsed.path or ""
+    return (
+        parsed.scheme.lower() == "https"
+        and parsed.hostname == "s3.amazonaws.com"
+        and parsed.port in (None, 443)
+        and path.startswith("/echo.api/")
+    )
+
+
+def _cached_cert(url: str) -> bytes:
+    cached = _CERTS.get(url)
+    if cached:
+        return cached
+    with urlopen(url, timeout=5) as response:
+        pem = response.read()
+    _CERTS[url] = pem
+    return pem
+
+
+def _signature_matches(pem: bytes, signature: str, body: bytes) -> bool:
+    from cryptography import x509
+    from cryptography.hazmat.primitives import hashes
+    from cryptography.hazmat.primitives.asymmetric import padding
+
+    cert = x509.load_pem_x509_certificate(pem)
+    now = datetime.now(timezone.utc)
+    start = getattr(cert, "not_valid_before_utc", None) or cert.not_valid_before.replace(tzinfo=timezone.utc)
+    end = getattr(cert, "not_valid_after_utc", None) or cert.not_valid_after.replace(tzinfo=timezone.utc)
+    if start > now or end < now:
+        return False
+    names = cert.extensions.get_extension_for_class(x509.SubjectAlternativeName).value.get_values_for_type(x509.DNSName)
+    if "echo-api.amazon.com" not in names:
+        return False
+    cert.public_key().verify(base64.b64decode(signature), body, padding.PKCS1v15(), hashes.SHA1())
+    return True
 
 
 def handle_alexa(body: dict, agent) -> dict:
@@ -48,6 +124,8 @@ def handle_alexa(body: dict, agent) -> dict:
         return _approve(agent, attributes)
     if name == "RejectIntent":
         return _reject(agent, attributes)
+    if name == "DiscussIntent":
+        return _discuss(attributes, _slot(intent, "question"))
     return _say(_HELP, attributes, end=False)
 
 
@@ -108,6 +186,18 @@ def _approve(agent, attributes: dict) -> dict:
         speech = f"Approve did not run. {service_id} is still open."
     _remember(service_id, "approve", speech)
     return _say(speech, {}, end=True)
+
+
+def _discuss(attributes: dict, spoken: str) -> dict:
+    from mcp_server.server import DiscussRequest, agent_discuss
+
+    text = spoken or "how's the fleet"
+    result = agent_discuss(DiscussRequest(
+        service_id=attributes.get("pending_service_id"),
+        channel="voice",
+        text=text,
+    ))
+    return _say(result.get("reply") or _HELP, attributes, end=False)
 
 
 def _reject(agent, attributes: dict) -> dict:
