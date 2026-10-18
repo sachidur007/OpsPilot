@@ -37,7 +37,7 @@ fi
 aws ecr describe-repositories --repository-names "$REPO" --region "$REGION" >/dev/null 2>&1 || \
   aws ecr create-repository --repository-name "$REPO" --region "$REGION" >/dev/null
 aws ecr get-login-password --region "$REGION" | docker login --username AWS --password-stdin "${ACCOUNT}.dkr.ecr.${REGION}.amazonaws.com"
-docker build -t "$REPO" "$ROOT"
+docker build --platform linux/amd64 --provenance=false --sbom=false -t "$REPO" "$ROOT"
 docker tag "$REPO:latest" "${ACCOUNT}.dkr.ecr.${REGION}.amazonaws.com/${REPO}:latest"
 docker push "${ACCOUNT}.dkr.ecr.${REGION}.amazonaws.com/${REPO}:latest"
 
@@ -60,6 +60,7 @@ else
       \"ImageRepositoryType\": \"ECR\",
       \"ImageConfiguration\": {\"Port\": \"8000\", \"RuntimeEnvironmentVariables\": {\"AWS_REGION\": \"${REGION}\", \"BEDROCK_MODEL_ID\": \"us.anthropic.claude-sonnet-5\", \"OPSPILOT_TRACES\": \"1\"}}
     }
-  }" --instance-configuration "{\"Cpu\": \"1024\", \"Memory\": \"2048\", \"InstanceRoleArn\": \"${INSTANCE_ROLE}\"}" >/dev/null
+  }" --instance-configuration "{\"Cpu\": \"1024\", \"Memory\": \"2048\", \"InstanceRoleArn\": \"${INSTANCE_ROLE}\"}" \
+    --health-check-configuration Protocol=TCP,Interval=10,Timeout=5,HealthyThreshold=1,UnhealthyThreshold=12 >/dev/null
 fi
 echo "provision requested for account ${ACCOUNT}"
