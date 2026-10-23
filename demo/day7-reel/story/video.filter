@@ -1,1 +1,0 @@
-[0:v]crop=1800:3200:0:'if(lt(t,7.4),0,if(lt(t,15.887),trunc((400*pow(((t-7.4)/8.487),2)*(3-2*((t-7.4)/8.487)))/2)*2,400))',scale=1440:2560:flags=lanczos,fps=30,format=yuv420p,fade=t=in:st=0:d=0.35,fade=t=out:st=33.775:d=0.45[v]

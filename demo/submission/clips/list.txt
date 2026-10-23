@@ -1,3 +1,0 @@
-file '/Volumes/chandu chidurala/Opspilot/demo/submission/clips/00.mp4'
-file '/Volumes/chandu chidurala/Opspilot/demo/submission/clips/01.mp4'
-file '/Volumes/chandu chidurala/Opspilot/demo/submission/clips/02.mp4'

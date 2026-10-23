@@ -1,1 +1,0 @@
-[0:v]crop=1800:3200:0:'trunc((400*t/10.000)/2)*2',scale=1440:2560:flags=lanczos,fps=30,format=yuv420p[v]

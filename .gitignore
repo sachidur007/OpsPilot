@@ -2,6 +2,7 @@ venv/
 .voice-venv/
 .dialogue-venv/
 agent/voice_data/
+demo/
 simulator/data/command_record.json
 simulator/data/repo_findings.json
 simulator/data/provisions/
