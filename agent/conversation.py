@@ -226,7 +226,7 @@ def _greeting(text: str) -> str:
 def _identity(service_id: str | None) -> str:
     watching = f" You have {service_id} open." if service_id else ""
     return (
-        "I'm OpsPilot. I only talk about this board. "
+        "I'm FleetOps, on Fleet Commander. I only talk about this board. "
         "I read a service when you ask, I explain what I find, and I wait for your approve before anything changes. "
         "I will not write other material or answer questions outside this product."
         + watching
@@ -248,6 +248,6 @@ def _capability(service_id: str | None) -> str:
 
 def _general(service_id: str | None) -> str:
     return (
-        "I only answer questions about OpsPilot. Ask about a service on this board, what is wrong, "
+        "I only answer questions about FleetOps. Ask about a service on this board, what is wrong, "
         "or what Approve, Reject, and Override do. I will not write other material or answer anything outside this product."
     )

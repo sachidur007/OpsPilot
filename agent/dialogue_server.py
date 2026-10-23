@@ -14,7 +14,7 @@ print(f"loading {MODEL_ID}", flush=True)
 model, tokenizer = load(MODEL_ID)
 print("dialogue ready", flush=True)
 
-app = FastAPI(title="OpsPilot dialogue")
+app = FastAPI(title="FleetOps dialogue")
 
 
 class ReplyRequest(BaseModel):

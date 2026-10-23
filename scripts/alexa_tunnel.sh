@@ -1,7 +1,8 @@
 #!/bin/sh
-# Expose the existing agent so Alexa can call POST /alexa.
-# Amazon cannot reach 127.0.0.1. Paste the printed https host, plus /alexa,
-# into the Alexa console endpoint.
+# Local only. The hosted skill endpoint is
+# https://yn6f6qpstp.us-east-1.awsapprunner.com/alexa
+# Use this script when the agent is running on this machine and Amazon
+# cannot call 127.0.0.1. Paste the printed https host, plus /alexa.
 set -e
 if command -v cloudflared >/dev/null 2>&1; then
   exec cloudflared tunnel --url http://127.0.0.1:8000

@@ -165,7 +165,7 @@ SCENES = {
         """
         <p class="kicker">AMAZON APP DEV HACKATHON</p>
         <div class="dayline"><h1 class="mega">DAY 7</h1><div class="slash">/20</div></div>
-        <p class="lede">I tried to connect OpsPilot to Claude.</p>
+        <p class="lede">I tried to connect FleetOps to Claude.</p>
         """,
     ),
     "02": page(

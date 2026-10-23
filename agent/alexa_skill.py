@@ -1,4 +1,4 @@
-"""Alexa+ adapter. It only calls the existing OpsPilot agent."""
+"""Alexa+ adapter. It only calls the existing FleetOps agent."""
 
 from __future__ import annotations
 
@@ -106,7 +106,7 @@ def handle_alexa(body: dict, agent) -> dict:
     attributes = dict((body.get("session") or {}).get("attributes") or {})
     kind = request.get("type")
     if kind == "LaunchRequest":
-        return _say("OpsPilot. " + _HELP, attributes, end=False)
+        return _say("FleetOps. " + _HELP, attributes, end=False)
     if kind == "SessionEndedRequest":
         return _say("", attributes, end=True)
     if kind != "IntentRequest":

@@ -1,0 +1,6 @@
+{
+  "name": "node-only",
+  "dependencies": {
+    "left-pad": "1.0.0"
+  }
+}

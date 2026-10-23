@@ -12,6 +12,7 @@
         "logs:CreateLogGroup",
         "logs:CreateLogStream",
         "logs:PutLogEvents",
+        "logs:DescribeLogGroups",
         "logs:DescribeLogStreams"
       ],
       "Resource": "*"

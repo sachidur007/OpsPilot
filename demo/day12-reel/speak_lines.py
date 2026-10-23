@@ -17,7 +17,7 @@ LINES = [
     "And I am still dealing with the Bedrock blocker.",
     "Building a product, and getting it ready for someone else to judge, are two different jobs.",
     "So the order changes. Secure the code. Make the demo repeatable. Finish Alexa. Then submit.",
-    "Eleven days left. The question is not whether I can build OpsPilot. It is whether I can get it ready in time.",
+    "Eleven days left. The question is not whether I can build FleetOps. It is whether I can get it ready in time.",
     "If you have done a hackathon, what is the one thing you wish you had done earlier?",
 ]
 

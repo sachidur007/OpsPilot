@@ -1,32 +1,86 @@
 [
   {
-    "timestamp": "2026-10-08T08:29:00.506765+00:00",
+    "timestamp": "2026-10-23T09:43:36.882896+00:00",
     "service": "inventory-service",
     "level": "CRITICAL",
     "message": "[Memory Leak] java.lang.OutOfMemoryError: Java heap space. Container restarted by OOMKiller"
   },
   {
-    "timestamp": "2026-10-08T08:26:45.947519+00:00",
+    "timestamp": "2026-10-23T09:19:56.950942+00:00",
     "service": "payment-service",
     "level": "CRITICAL",
     "message": "[Connection Pool Exhaustion] SQLException: Unable to acquire JDBC Connection - pool size (100) exceeded"
   },
   {
-    "timestamp": "2026-10-08T08:29:10.895197+00:00",
+    "timestamp": "2026-10-23T09:23:09.669752+00:00",
     "service": "auth-service",
     "level": "ERROR",
     "message": "[Expired JWT Secret] SignatureVerificationException: The Token's Signature is invalid / Key Rotation Mismatch"
   },
   {
-    "timestamp": "2026-10-08T08:26:45.947519+00:00",
+    "timestamp": "2026-10-23T09:51:02.263061+00:00",
+    "service": "notification-service",
+    "level": "ERROR",
+    "message": "[Deadlock] Thread Deadlock detected on pool-worker-8 waiting for lock on MailerQueue"
+  },
+  {
+    "timestamp": "2026-10-23T09:51:51.310152+00:00",
+    "service": "postgres-primary",
+    "level": "CRITICAL",
+    "message": "[Disk Space Exhaustion] PANIC: could not write to file pg_wal/xlog: No space left on device (100% utilized)"
+  },
+  {
+    "timestamp": "2026-10-23T09:41:38.091161+00:00",
+    "service": "dynamodb-orders-table",
+    "level": "ERROR",
+    "message": "[Provisioned Throughput Exceeded] ProvisionedThroughputExceededException: Request rate is higher than provisioned write capacity"
+  },
+  {
+    "timestamp": "2026-10-23T09:42:39.945605+00:00",
+    "service": "elasticsearch-logs",
+    "level": "ERROR",
+    "message": "[Unassigned Shards / Cluster Red State] ClusterHealthResult: RED - 14 primary shards unassigned due to disk watermark"
+  },
+  {
+    "timestamp": "2026-10-23T09:19:56.950942+00:00",
     "service": "ingress-nginx-controller",
     "level": "ERROR",
     "message": "[Expired TLS Certificate] SSL_ERROR_EXPIRED_CERTIFICATE: x509: certificate has expired or is not yet valid"
   },
   {
-    "timestamp": "2026-10-08T08:26:45.947519+00:00",
+    "timestamp": "2026-10-23T09:44:31.863090+00:00",
+    "service": "istio-service-mesh",
+    "level": "ERROR",
+    "message": "[mTLS Handshake Timeout] Envoy internal error: downstream connection termination / mTLS certificate validation failure"
+  },
+  {
+    "timestamp": "2026-10-23T09:21:37.346185+00:00",
+    "service": "api-gateway",
+    "level": "ERROR",
+    "message": "[Rate Limiter Misconfiguration] HTTP 429 Too Many Requests: Rate limit set to 10 req/min instead of 10000 req/min"
+  },
+  {
+    "timestamp": "2026-10-23T09:40:29.759072+00:00",
+    "service": "dns-route53-resolver",
+    "level": "ERROR",
+    "message": "[Internal DNS Resolution Failure] getaddrinfo ENOTFOUND internal.services.local"
+  },
+  {
+    "timestamp": "2026-10-23T09:50:14.857630+00:00",
+    "service": "kafka-event-bus",
+    "level": "CRITICAL",
+    "message": "[Broker Disk Full / Controller Failover] KafkaStorageException: Disk error on broker 3 / Partition offline"
+  },
+  {
+    "timestamp": "2026-10-23T09:19:56.950942+00:00",
     "service": "vault-secrets-manager",
     "level": "ERROR",
     "message": "[Sealed Vault Instance] VaultIsSealedException: Vault is sealed. Requests cannot be processed"
+  },
+  {
+    "timestamp": "2026-10-23T10:32:04.432022+00:00",
+    "service": "rabbitmq-broker",
+    "level": "CRITICAL",
+    "message": "[Memory Alarm Triggered] rabbitmq_memory_high_watermark reached: blocking connections"
   }
 ]

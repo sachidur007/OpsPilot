@@ -1,0 +1,7 @@
+The first part of the video is the board, unchanged: what's wrong with payments, the finding, and approve.
+
+Then these two lines, with the Scenario fallback badge still visible:
+
+Alexa+ partner tools are closed to this hackathon, so the board is the client and it calls the MCP server on protocol 2025-11-25.
+
+Bedrock is the reasoning path. This account returns Error 002, which is open with AWS support, so the source line stays Scenario fallback. The agent is hosted on App Runner and the request is in CloudWatch.

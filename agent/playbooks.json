@@ -1,0 +1,12 @@
+[
+  {
+    "id": "php2shell-2026-10-21",
+    "ecosystem": "php",
+    "name": "php",
+    "affected_below": "8.4.15",
+    "provision": "upgrade_runtime",
+    "target": "8.4.15",
+    "advisories": ["CVE-2026-109618", "CVE-2026-109619"],
+    "summary": "PHP engine flaws PHP2Shell, CVE-2026-109618 and CVE-2026-109619. This runtime is below the patched release. Upgrade PHP. Updating an application framework alone does not fix the engine."
+  }
+]

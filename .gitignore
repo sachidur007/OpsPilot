@@ -3,6 +3,9 @@ venv/
 .dialogue-venv/
 agent/voice_data/
 simulator/data/command_record.json
+simulator/data/repo_findings.json
+simulator/data/provisions/
+simulator/data/work/
 .env
 __pycache__/
 *.pyc

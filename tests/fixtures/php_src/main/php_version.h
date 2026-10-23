@@ -1,0 +1,7 @@
+/* generated for the reader fixture */
+#define PHP_MAJOR_VERSION 8
+#define PHP_MINOR_VERSION 3
+#define PHP_RELEASE_VERSION 6
+#define PHP_EXTRA_VERSION ""
+#define PHP_VERSION "8.3.6"
+#define PHP_VERSION_ID 80306

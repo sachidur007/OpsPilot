@@ -116,7 +116,7 @@ SCENES = {
         """
         <p class="kicker">11 DAYS LEFT</p>
         <h1 class="mid">Can I get it ready in time?</h1>
-        <p class="fine">The question is no longer whether I can build OpsPilot.</p>
+        <p class="fine">The question is no longer whether I can build FleetOps.</p>
         """,
     ),
     "11": day7.page(

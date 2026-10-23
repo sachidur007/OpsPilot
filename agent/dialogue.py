@@ -10,7 +10,7 @@ ENDPOINT = "http://127.0.0.1:8012/reply"
 _KINDS = ("greeting", "product", "decision", "finding", "explain", "offtopic")
 _ALLOWED = {"greeting", "product", "decision", "finding", "explain"}
 REFUSAL = (
-    "I only answer questions about OpsPilot. Ask about a service on this board, what is wrong, "
+    "I only answer questions about FleetOps. Ask about a service on this board, what is wrong, "
     "or what Approve, Reject, and Override do. I will not write other material or answer anything outside this product."
 )
 _BLOCKED = (
@@ -55,7 +55,7 @@ def answer(service_id: str | None, question: str) -> str | None:
         if _named_service(asked, _read()["services"]):
             return None
     reply = _ask(
-        "You are OpsPilot. Speak in short ordinary sentences to someone who may know nothing about software. "
+        "You are FleetOps, the Fleet Commander. Speak in short ordinary sentences to someone who may know nothing about software. "
         "Say you, not they. Use only the facts given. Do not invent buttons, numbers, or versions.",
         _prompt(kind, asked, pack),
         160,
@@ -74,7 +74,7 @@ def _prompt(kind: str, question: str, pack: dict) -> str:
     name = selected["service_id"] if selected else "nothing"
     if kind == "greeting":
         facts = "No service facts. This is only a hello."
-        task = "Give one short greeting and ask what they want to know about this board. Do not mention a service or a number. Do not invite questions outside OpsPilot."
+        task = "Give one short greeting and ask what they want to know about this board. Do not mention a service or a number. Do not invite questions outside FleetOps."
     elif kind == "product":
         facts = (
             "The board, the chat, and the fleet work. "
@@ -110,7 +110,7 @@ def _prompt(kind: str, question: str, pack: dict) -> str:
     else:
         facts = _selected_facts(selected) or "No service is open."
         facts += f"\nBroken count: {pack['open_count']}. Fine count: {pack['healthy_count']}."
-        task = "This question is outside OpsPilot. Say only that you cannot help with it."
+        task = "This question is outside FleetOps. Say only that you cannot help with it."
     return f"Facts:\n{facts}\n\nQuestion: {question}\n\n{task}"
 
 

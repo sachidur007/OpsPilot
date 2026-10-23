@@ -7,6 +7,7 @@ from simulator.main import (
     remediate,
     reject_incident,
     reset_fleet,
+    declare_incident,
     store_analysis,
     trigger_chaos,
 )
@@ -44,16 +45,20 @@ def tool_execute_rollback(service_name: str, target_version: str):
     return remediate(service_name, "rollback", target_version)
 
 
-def tool_remediate(service_id: str, action: str, target: str):
-    return remediate(service_id, action, target)
+def tool_remediate(service_id: str, action: str, target: str, reason: str = ""):
+    return remediate(service_id, action, target, reason)
 
 
-def tool_reject(service_id: str):
-    return reject_incident(service_id)
+def tool_reject(service_id: str, reason: str = ""):
+    return reject_incident(service_id, reason)
 
 
 def tool_trigger_chaos():
     return trigger_chaos()
+
+
+def tool_declare_incident(service_id: str, fields: dict | None = None):
+    return declare_incident(service_id, fields)
 
 
 def tool_reset_fleet():
@@ -62,6 +67,38 @@ def tool_reset_fleet():
 
 def tool_store_analysis(service_id: str, analysis: dict):
     return store_analysis(service_id, analysis)
+
+
+def tool_list_incidents():
+    fleet = get_fleet()
+    return {"incidents": fleet["active_incidents"]}
+
+
+def tool_get_timeline(service_id: str = ""):
+    fleet = get_fleet()
+    events = fleet["timeline"]
+    if service_id:
+        events = [item for item in events if item.get("service_id") == service_id]
+    return {"service_id": service_id or None, "timeline": events}
+
+
+def tool_get_alert(service_id: str):
+    record = get_service_record(service_id)
+    if not record or record.get("status") == "MISSING":
+        return {"service": service_id, "alert": None, "forecast": None}
+    if record.get("status") == "HEALTHY":
+        return {"service": service_id, "alert": None, "forecast": record.get("forecast")}
+    return {
+        "service": service_id,
+        "alert": {
+            "service": service_id,
+            "severity": record.get("severity"),
+            "error_rate": record.get("error_rate"),
+            "suggested_action": record.get("recommended_action"),
+            "target": record.get("target"),
+        },
+        "forecast": None,
+    }
 
 
 def tool_verify_recovery(service_name: str):

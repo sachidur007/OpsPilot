@@ -13,9 +13,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "OpsPilot Command Center",
+  title: "Fleet Commander",
   description:
-    "Incident command for active failures, rollback targets, and human-approved recovery.",
+    "FleetOps incident command for active failures, rollback targets, and human-approved recovery.",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

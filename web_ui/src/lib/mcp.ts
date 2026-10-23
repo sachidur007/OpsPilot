@@ -31,21 +31,28 @@ export async function investigateOverMcp(serviceId: string): Promise<string[]> {
   const opened = await rpc(1, "initialize", {
     protocolVersion: "2025-11-25",
     capabilities: {},
-    clientInfo: { name: "opspilot-board", version: "1" },
+    clientInfo: { name: "fleetops-board", version: "1" },
   });
   const version = opened.result?.protocolVersion || opened.error?.message || "no version";
   notes.push(`MCP initialize ${version}.`);
   const listed = await rpc(2, "tools/list", {});
   const names = (listed.result?.tools || []).map((tool) => tool.name);
   notes.push(`MCP tools/list ${names.join(", ") || "none"}.`);
-  const called = await rpc(3, "tools/call", {
-    name: "get_service_status",
-    arguments: { service_id: serviceId },
-  });
-  if (called.error || called.result?.isError) {
-    notes.push(`MCP tools/call get_service_status ${serviceId} failed.`);
-  } else {
-    notes.push(`MCP tools/call get_service_status ${serviceId}.`);
+  const calls: { name: string; arguments: Record<string, string> }[] = [
+    { name: "get_service_status", arguments: { service_id: serviceId } },
+    { name: "list_incidents", arguments: {} },
+    { name: "get_timeline", arguments: { service_id: serviceId } },
+    { name: "get_alert", arguments: { service_id: serviceId } },
+  ];
+  for (let index = 0; index < calls.length; index += 1) {
+    const call = calls[index];
+    const called = await rpc(3 + index, "tools/call", call);
+    const target = call.arguments.service_id ? ` ${call.arguments.service_id}` : "";
+    if (called.error || called.result?.isError) {
+      notes.push(`MCP tools/call ${call.name}${target} failed.`);
+    } else {
+      notes.push(`MCP tools/call ${call.name}${target}.`);
+    }
   }
   return notes;
 }

@@ -19,7 +19,7 @@ ROOT = Path(__file__).resolve().parent
 REFERENCE = ROOT / "voice_data" / "myvoice.wav"
 MODEL_ID = os.getenv("VOICE_MODEL", "mlx-community/chatterbox-turbo-fp16")
 
-app = FastAPI(title="OpsPilot voice")
+app = FastAPI(title="FleetOps voice")
 model = None
 lock = threading.Lock()
 

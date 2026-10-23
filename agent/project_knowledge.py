@@ -70,7 +70,8 @@ _PROJECT = (
     "how this works",
     "the code",
     "in the code",
-    "opspilot",
+    "fleetops",
+    "fleet commander",
     "command record",
     "what commands",
     "which commands",
@@ -78,7 +79,8 @@ _PROJECT = (
 
 _BROAD = (
     "what is this",
-    "what is opspilot",
+    "what is fleetops",
+    "what is fleet commander",
     "explain the project",
     "explain this project",
     "entire application",
@@ -95,7 +97,7 @@ _BROAD = (
 )
 
 _OVERVIEW = (
-    "I'm OpsPilot. Talk to me normally, and ask when you want the product. "
+    "I'm FleetOps. This board is Fleet Commander. Talk to me normally, and ask when you want the product. "
     "The board talks only to the agent on port 8000. "
     "When you ask what's wrong with a service, I investigate it: Bedrock when the account allows it, otherwise I tell you the source is Scenario fallback. "
     "The fleet is the simulator, with 24 scenarios. Approve calls POST /agent/remediate. Reject calls POST /agent/reject. "

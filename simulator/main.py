@@ -12,6 +12,14 @@ METRICS_FILE = DATA_DIR / "metrics.json"
 LOGS_FILE = DATA_DIR / "logs.json"
 DEPLOYMENTS_FILE = DATA_DIR / "deployments.json"
 STATE_VERSION = 1
+MODEL_CAP = 40
+SLOPE_WAIT_SECONDS = 30
+SLOPE_STEP = 0.008
+RULES = (
+    "Error rate at or above 20%, or a CRITICAL log, is SEV-1.",
+    "Error rate at or above 5% is SEV-2.",
+    "Otherwise the alert is SEV-3.",
+)
 
 _lock = threading.Lock()
 
@@ -31,7 +39,7 @@ def severity_for(status: str, error_rate: float, log_level: str) -> str | None:
 
 
 def _healthy_service(scenario: dict, opened_at: str) -> dict:
-    return {
+    service = {
         "service_id": scenario["service"],
         "layer": scenario["layer"],
         "layer_label": LAYERS[scenario["layer"]],
@@ -56,7 +64,12 @@ def _healthy_service(scenario: dict, opened_at: str) -> dict:
         "scenario_log_level": scenario["log_level"],
         "proposal": None,
         "updated_at": opened_at,
+        "silenced_until": None,
+        "jira_key": None,
+        "error_history": [],
     }
+    service["error_history"] = _seed_history(service)
+    return service
 
 
 def _activate(service: dict, at: str) -> None:
@@ -76,6 +89,7 @@ def _activate(service: dict, at: str) -> None:
         "target_version_or_value": service["scenario_target"],
         "source": "scenario-fallback",
     }
+    service["error_history"] = [round(float(service["error_rate"]), 4)]
     service["updated_at"] = at
 
 
@@ -121,11 +135,35 @@ def _opening_state() -> dict:
                 "message": "Opening scene armed. payment-service, vault-secrets-manager, and ingress-nginx-controller are in incident. 21 services are healthy.",
             }
         ],
+        "model_calls": 0,
+        "model_cap": MODEL_CAP,
+        "slope_advanced_at": opened_at,
+        "last_bedrock": None,
     }
 
 
+def _declaration(service: dict) -> dict | None:
+    raw = service.get("declaration")
+    if isinstance(raw, dict) and raw.get("title") and raw.get("details"):
+        return raw
+    if isinstance(raw, str) and raw.strip():
+        return {
+            "title": service["service_id"],
+            "severity": severity_for(service["status"], service["error_rate"], service["log_level"]),
+            "details": " ".join(raw.split()),
+            "notes": None,
+            "links": [],
+            "attributes": [],
+        }
+    return None
+
+
 def _present(service: dict) -> dict:
+    declaration = _declaration(service)
     severity = severity_for(service["status"], service["error_rate"], service["log_level"])
+    chosen = (declaration or {}).get("severity")
+    if service["status"] != "HEALTHY" and chosen in ("SEV-1", "SEV-2", "SEV-3"):
+        severity = chosen
     proposal = service.get("proposal")
     return {
         "service_id": service["service_id"],
@@ -146,6 +184,13 @@ def _present(service: dict) -> dict:
         "target": (proposal or {}).get("target_version_or_value", service["target"]),
         "root_cause": (proposal or {}).get("root_cause"),
         "proposal_source": (proposal or {}).get("source"),
+        "fallback_reason": (proposal or {}).get("fallback_reason"),
+        "declaration": declaration,
+        "decision": service.get("decision") if isinstance(service.get("decision"), dict) else None,
+        "silenced_until": service.get("silenced_until"),
+        "jira_key": service.get("jira_key"),
+        "forecast": _forecast(service),
+        "observed_rate": _observed(service),
         "updated_at": service["updated_at"],
     }
 
@@ -208,13 +253,291 @@ def _read() -> dict:
     if state.get("version") != STATE_VERSION:
         state = _opening_state()
         _write(state)
+        return state
+    _backfill(state)
     return state
 
 
 def _write(state: dict) -> None:
     DATA_DIR.mkdir(parents=True, exist_ok=True)
+    state.pop("_backfill_dirty", None)
+    state.pop("_notices", None)
     STATE_FILE.write_text(json.dumps(state, indent=2))
     _mirror(state)
+
+
+def _backfill(state: dict) -> None:
+    dirty = False
+    if "model_calls" not in state:
+        state["model_calls"] = 0
+        dirty = True
+    if "model_cap" not in state:
+        state["model_cap"] = MODEL_CAP
+        dirty = True
+    if "slope_advanced_at" not in state:
+        state["slope_advanced_at"] = _now()
+        dirty = True
+    if "last_bedrock" not in state:
+        state["last_bedrock"] = None
+        dirty = True
+    for service in state["services"].values():
+        if "silenced_until" not in service:
+            service["silenced_until"] = None
+            dirty = True
+        if "jira_key" not in service:
+            service["jira_key"] = None
+            dirty = True
+        if not service.get("error_history"):
+            service["error_history"] = _seed_history(service)
+            dirty = True
+    if dirty:
+        state["_backfill_dirty"] = True
+
+
+def _seed_history(service: dict) -> list[float]:
+    if service.get("status") != "HEALTHY":
+        return [round(float(service.get("error_rate") or 0), 4)]
+    if float(service.get("scenario_error_rate") or 0) < 0.05:
+        return [0.0]
+    return [0.012, 0.021, 0.029, 0.036]
+
+
+def _forecast(service: dict) -> str | None:
+    if service.get("status") != "HEALTHY" or _silenced(service):
+        return None
+    if float(service.get("scenario_error_rate") or 0) < 0.05:
+        return None
+    history = [float(item) for item in service.get("error_history") or []]
+    if len(history) < 2:
+        return None
+    if history[-1] <= history[-2] or history[-1] >= 0.05 or history[-1] <= history[0]:
+        return None
+    return "approaching SEV-2"
+
+
+def _observed(service: dict) -> float:
+    if service.get("status") != "HEALTHY":
+        return float(service.get("error_rate") or 0)
+    history = service.get("error_history") or []
+    if not history:
+        return 0.0
+    return float(history[-1])
+
+
+def _silenced(service: dict, moment: datetime | None = None) -> bool:
+    raw = service.get("silenced_until")
+    if not raw:
+        return False
+    try:
+        until = datetime.fromisoformat(raw)
+    except ValueError:
+        return False
+    if until.tzinfo is None:
+        until = until.replace(tzinfo=timezone.utc)
+    moment = moment or datetime.now(timezone.utc)
+    return until > moment
+
+
+def _parse_until(raw: str) -> str | None:
+    text = " ".join((raw or "").split())
+    if not text:
+        return None
+    try:
+        parsed = datetime.fromisoformat(text.replace("Z", "+00:00"))
+    except ValueError:
+        return None
+    if parsed.tzinfo is None:
+        parsed = parsed.replace(tzinfo=timezone.utc)
+    return parsed.isoformat()
+
+
+def _degrade(state: dict, service: dict, source: str, actor: str) -> None:
+    at = _now()
+    _activate(service, at)
+    service["proposal"]["source"] = source
+    service_id = service["service_id"]
+    queue = state["chaos_queue"]
+    if service_id in queue:
+        queue.remove(service_id)
+    service["queue_order"] = 50 + (24 - len(queue))
+    presented = _present(service)
+    state.setdefault("_notices", []).append({
+        "kind": "open",
+        "service_id": service_id,
+        "severity": presented.get("severity"),
+        "action": presented["recommended_action"],
+        "actor": actor,
+    })
+    if source == "chaos":
+        message = (
+            f"Simulate Chaos degraded {service_id}: {service['issue_type']} on {service['version']}. "
+            f"Proposed {service['recommended_action']} -> {service['target']}."
+        )
+        kind = "chaos"
+    elif source == "declared":
+        declared = service.get("declaration") if isinstance(service.get("declaration"), dict) else {}
+        title = declared.get("title") or service_id
+        level = declared.get("severity") or ""
+        details = declared.get("details") or ""
+        message = (
+            f"Operator declared {title} ({level}) on {service_id}: {details} "
+            f"Catalog fault is {service['issue_type']} on {service['version']}. "
+            f"Proposed {service['recommended_action']} -> {service['target']}."
+        )
+        kind = "alert"
+    else:
+        message = (
+            f"Error rate crossed 5% on {service_id}. Opened {presented.get('severity')} alert. "
+            f"Proposed {service['recommended_action']} -> {service['target']}."
+        )
+        kind = "alert"
+    _append_timeline(state, service_id, kind, message)
+
+
+def advance_slope(state: dict, *, force: bool = False) -> bool:
+    moment = datetime.now(timezone.utc)
+    previous = state.get("slope_advanced_at")
+    if not force and previous:
+        try:
+            then = datetime.fromisoformat(previous)
+        except ValueError:
+            then = None
+        if then is not None:
+            if then.tzinfo is None:
+                then = then.replace(tzinfo=timezone.utc)
+            if (moment - then).total_seconds() < SLOPE_WAIT_SECONDS:
+                return False
+    state["slope_advanced_at"] = moment.isoformat()
+    ranked = []
+    for service in state["services"].values():
+        if service.get("status") != "HEALTHY" or _silenced(service, moment):
+            continue
+        if float(service.get("scenario_error_rate") or 0) < 0.05:
+            continue
+        history = [float(item) for item in (service.get("error_history") or _seed_history(service))]
+        last = history[-1] if history else 0.0
+        nxt = round(last + SLOPE_STEP, 4)
+        ranked.append((nxt, service["service_id"], service, history))
+    ranked.sort(key=lambda item: (-item[0], item[1]))
+    crossed = False
+    changed = False
+    for nxt, _service_id, service, history in ranked:
+        if nxt >= 0.05 and not crossed:
+            _degrade(state, service, "slope", "slope")
+            crossed = True
+            changed = True
+            continue
+        capped = round(min(nxt, 0.049), 4)
+        service["error_history"] = (history + [capped])[-8:]
+        changed = True
+    return changed
+
+
+def _emit_notices(notices: list) -> bool:
+    from agent.outbound import comment_jira, create_jira_issue, post_slack
+
+    keys = []
+    for notice in notices:
+        kind = notice.get("kind")
+        service_id = notice.get("service_id")
+        severity = notice.get("severity")
+        action = notice.get("action") or ""
+        if kind == "open":
+            post_slack(service_id, severity, action, notice.get("actor") or "operator")
+            key = create_jira_issue(service_id, severity, action)
+            if key:
+                keys.append((service_id, key))
+        elif kind == "approve":
+            post_slack(service_id, severity, action, "operator")
+            comment_jira(notice.get("jira_key"), f"Approved {action} to {notice.get('target')} on {service_id}.")
+        elif kind == "reject":
+            post_slack(service_id, severity, "reject", "operator")
+    if not keys:
+        return False
+    with _lock:
+        state = _read()
+        for service_id, key in keys:
+            service = state["services"].get(service_id)
+            if service is not None:
+                service["jira_key"] = key
+        _write(state)
+    return True
+
+
+def silence_service(service_id: str, until: str) -> dict:
+    with _lock:
+        state = _read()
+        service = state["services"].get(service_id)
+        if not service:
+            return {"status": "MISSING", "service_id": service_id}
+        parsed = _parse_until(until)
+        if not parsed:
+            return {"status": "INVALID_TIME", "service_id": service_id}
+        service["silenced_until"] = parsed
+        service["updated_at"] = _now()
+        _append_timeline(state, service_id, "silence", f"Muted {service_id} until {parsed}.")
+        _write(state)
+        return {"status": "SILENCED", "service": _present(service)}
+
+
+def budget_view(state: dict | None = None) -> dict:
+    owned = state is None
+    if owned:
+        _lock.acquire()
+    try:
+        if state is None:
+            state = _read()
+        calls = int(state.get("model_calls") or 0)
+        cap = int(state.get("model_cap") or MODEL_CAP)
+        return {"calls": calls, "cap": cap, "remaining": max(0, cap - calls)}
+    finally:
+        if owned:
+            _lock.release()
+
+
+def begin_model_call(model_id: str) -> dict:
+    with _lock:
+        state = _read()
+        state["model_calls"] = int(state.get("model_calls") or 0) + 1
+        state["last_bedrock"] = {
+            "model_id": model_id,
+            "source": "pending",
+            "fallback_reason": None,
+        }
+        _write(state)
+        return budget_view(state)
+
+
+def finish_model_call(model_id: str, source: str, fallback_reason: str | None) -> dict:
+    with _lock:
+        state = _read()
+        state["last_bedrock"] = {
+            "model_id": model_id,
+            "source": source,
+            "fallback_reason": (str(fallback_reason)[:240] if fallback_reason else None),
+        }
+        _write(state)
+        return budget_view(state)
+
+
+def bedrock_view() -> dict:
+    with _lock:
+        state = _read()
+        last = state.get("last_bedrock")
+        model_id = (last or {}).get("model_id")
+        return {"model_id": model_id, "last_bedrock": last}
+
+
+def stamp_coworker(entries: list, coworker: dict, reply: str) -> list:
+    with _lock:
+        updated = list(entries)
+        spoken = " ".join(reply.split())[:2200]
+        for entry in reversed(updated):
+            if entry.get("role") == "agent":
+                entry["text"] = spoken
+                entry["coworker"] = coworker
+                break
+        return _write_record(updated)
 
 
 def _read_record() -> list:
@@ -726,6 +1049,10 @@ def project_fleet(state: dict | None = None) -> dict:
             "timeline": list(state["timeline"]),
             "record": _read_record(),
             "chaos_remaining": len(state["chaos_queue"]),
+            "rules": list(RULES),
+            "model_calls": int(state.get("model_calls") or 0),
+            "model_cap": int(state.get("model_cap") or MODEL_CAP),
+            "last_bedrock": state.get("last_bedrock"),
         }
     finally:
         if owned:
@@ -734,7 +1061,17 @@ def project_fleet(state: dict | None = None) -> dict:
 
 def get_fleet() -> dict:
     with _lock:
-        return project_fleet(_read())
+        state = _read()
+        dirty = bool(state.get("_backfill_dirty"))
+        moved = advance_slope(state)
+        notices = list(state.pop("_notices", []))
+        if dirty or moved:
+            _write(state)
+        fleet = project_fleet(state)
+    if _emit_notices(notices):
+        with _lock:
+            fleet = project_fleet(_read())
+    return fleet
 
 
 def get_service_record(service_id: str) -> dict | None:
@@ -811,7 +1148,13 @@ def store_analysis(service_id: str, analysis: dict) -> dict:
         return _present(service)
 
 
-def remediate(service_id: str, action: str, target: str) -> dict:
+def _clean_reason(reason: str) -> str | None:
+    text = " ".join(str(reason or "").split())[:1000]
+    return text or None
+
+
+def remediate(service_id: str, action: str, target: str, reason: str = "") -> dict:
+    why = _clean_reason(reason)
     with _lock:
         state = _read()
         service = state["services"].get(service_id)
@@ -819,8 +1162,13 @@ def remediate(service_id: str, action: str, target: str) -> dict:
             return {"status": "MISSING", "service_id": service_id}
         if service["status"] == "HEALTHY":
             return {"status": "ALREADY_HEALTHY", "service_id": service_id, "verified": True}
+        if not why:
+            return {"status": "NEEDS_REASON", "service_id": service_id}
         if action not in ACTIONS:
             return {"status": "INVALID_ACTION", "service_id": service_id, "action": action}
+        before = _present(service)
+        overrode = action != service.get("recommended_action") or target != service.get("target")
+        issue_key = service.get("jira_key")
         at = _now()
         service["status"] = "HEALTHY"
         service["version"] = target
@@ -828,28 +1176,41 @@ def remediate(service_id: str, action: str, target: str) -> dict:
         service["error_rate"] = 0.0
         service["log_level"] = "INFO"
         service["issue_type"] = None
+        service.pop("declaration", None)
+        service.pop("decision", None)
         service["impact_summary"] = "Recovered after approved remediation."
         service["log_message"] = f"{action} applied. {service_id} restored to {target}."
         service["log_timestamp"] = at
         service["updated_at"] = at
         service["proposal"] = None
+        service["error_history"] = _seed_history(service)
         state["deployments"].append({
             "deployment_id": f"dep-{action}-{service_id}",
             "service": service_id,
             "version": target,
             "timestamp": at,
             "status": "SUCCESS",
-            "changes": f"{action} to {target} executed by OpsPilot",
+            "changes": f"{action} to {target} executed by FleetOps",
         })
+        verb = "overrode" if overrode else "approved"
         _append_timeline(
             state,
             service_id,
             "remediation",
-            f"Executed {action} on {service_id} -> {target}. Status HEALTHY. Error rate 0.00%.",
+            f"Operator {verb} {action} -> {target} on {service_id}: {why} Status HEALTHY. Error rate 0.00%.",
         )
+        state.setdefault("_notices", []).append({
+            "kind": "approve",
+            "service_id": service_id,
+            "severity": before.get("severity"),
+            "action": action,
+            "target": target,
+            "jira_key": issue_key,
+        })
+        notices = list(state.pop("_notices", []))
         _write(state)
         presented = _present(service)
-        return {
+        outcome = {
             "status": "SUCCESS",
             "service_id": service_id,
             "action": action,
@@ -859,45 +1220,133 @@ def remediate(service_id: str, action: str, target: str) -> dict:
             "health": "HEALTHY",
             "service": presented,
         }
+    _emit_notices(notices)
+    return outcome
 
 
-def reject_incident(service_id: str) -> dict:
+def reject_incident(service_id: str, reason: str = "") -> dict:
+    why = _clean_reason(reason)
     with _lock:
         state = _read()
         service = state["services"].get(service_id)
         if not service or service["status"] == "HEALTHY":
             return {"status": "MISSING", "service_id": service_id}
+        if not why:
+            return {"status": "NEEDS_REASON", "service_id": service_id}
+        before = _present(service)
         service["status"] = "TRIAGE"
+        service["decision"] = {"kind": "reject", "reason": why}
         service["updated_at"] = _now()
         _append_timeline(
             state,
             service_id,
             "rejection",
-            f"[HITL Rejection] Operator rejected the proposal for {service_id}. Incident returned to triage.",
+            f"Operator rejected the proposal for {service_id}: {why} Incident returned to triage.",
         )
+        notices = [{
+            "kind": "reject",
+            "service_id": service_id,
+            "severity": before.get("severity"),
+        }]
         _write(state)
-        return {"status": "TRIAGE", "service": _present(service)}
+        outcome = {"status": "TRIAGE", "service": _present(service)}
+    _emit_notices(notices)
+    return outcome
+
+
+def _clean_declaration(fields: dict | None) -> dict | None:
+    payload = fields or {}
+    title = " ".join(str(payload.get("title") or "").split())[:120]
+    severity = str(payload.get("severity") or "").strip()
+    details = " ".join(str(payload.get("details") or "").split())[:1000]
+    notes = " ".join(str(payload.get("notes") or "").split())[:1000]
+    if not title or severity not in ("SEV-1", "SEV-2", "SEV-3") or not details:
+        return None
+    links = []
+    for raw in payload.get("links") or []:
+        link = str(raw).strip()
+        if link.startswith("https://") or link.startswith("http://"):
+            links.append(link[:300])
+        if len(links) == 8:
+            break
+    attributes = []
+    for raw in payload.get("attributes") or []:
+        if not isinstance(raw, dict):
+            continue
+        name = " ".join(str(raw.get("name") or "").split())[:80]
+        value = " ".join(str(raw.get("value") or "").split())[:160]
+        if name and value:
+            attributes.append({"name": name, "value": value})
+        if len(attributes) == 8:
+            break
+    return {
+        "title": title,
+        "severity": severity,
+        "details": details,
+        "notes": notes or None,
+        "links": links,
+        "attributes": attributes,
+    }
+
+
+def declare_incident(service_id: str, fields: dict | None = None) -> dict:
+    cleaned = _clean_declaration(fields)
+    with _lock:
+        state = _read()
+        service = state["services"].get(service_id)
+        if not service:
+            return {"status": "MISSING", "service_id": service_id}
+        if service.get("status") != "HEALTHY":
+            return {"status": "ALREADY_OPEN", "service_id": service_id, "service": _present(service)}
+        if cleaned is None:
+            return {"status": "NEEDS_FIELDS", "service_id": service_id}
+        service["declaration"] = cleaned
+        _degrade(state, service, "declared", "operator")
+        notices = list(state.pop("_notices", []))
+        _write(state)
+        outcome = {"status": "DECLARED", "service": _present(service)}
+    if _emit_notices(notices):
+        with _lock:
+            state = _read()
+            current = state["services"].get(service_id)
+            if current:
+                outcome["service"] = _present(current)
+    return outcome
 
 
 def trigger_chaos() -> dict:
     with _lock:
         state = _read()
-        if not state["chaos_queue"]:
-            return {"status": "IDLE", "message": "Every catalog scenario is already in incident or recovered this session."}
-        service_id = state["chaos_queue"].pop(0)
-        service = state["services"][service_id]
-        at = _now()
-        _activate(service, at)
-        service["proposal"]["source"] = "chaos"
-        service["queue_order"] = 50 + (24 - len(state["chaos_queue"]))
-        _append_timeline(
-            state,
-            service_id,
-            "chaos",
-            f"Simulate Chaos degraded {service_id}: {service['issue_type']} on {service['version']}. Proposed {service['recommended_action']} -> {service['target']}.",
-        )
+        chosen = None
+        chosen_index = None
+        for index, service_id in enumerate(state["chaos_queue"]):
+            service = state["services"].get(service_id)
+            if not service or _silenced(service):
+                continue
+            chosen = service
+            chosen_index = index
+            break
+        if chosen is None:
+            return {
+                "status": "IDLE",
+                "message": "Every catalog scenario is already in incident, recovered, or silenced.",
+            }
+        state["chaos_queue"].pop(chosen_index)
+        _degrade(state, chosen, "chaos", "operator")
+        notices = list(state.pop("_notices", []))
         _write(state)
-        return {"status": "TRIGGERED", "service": _present(service), "chaos_remaining": len(state["chaos_queue"])}
+        outcome = {
+            "status": "TRIGGERED",
+            "service": _present(chosen),
+            "chaos_remaining": len(state["chaos_queue"]),
+        }
+    if _emit_notices(notices):
+        with _lock:
+            state = _read()
+            service = state["services"].get(outcome["service"]["service_id"])
+            if service:
+                outcome["service"] = _present(service)
+    return outcome
 
 
 def get_logs(service: str | None = None, level: str | None = None):

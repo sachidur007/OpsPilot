@@ -5,23 +5,23 @@
         "en-US": {
           "summary": "Ask what is wrong with a service, then approve or reject the fix.",
           "examplePhrases": [
-            "Alexa, ask ops pilot what's wrong with payments",
-            "Alexa, ask ops pilot to approve",
-            "Alexa, ask ops pilot to reject"
+            "Alexa, ask fleet ops what's wrong with payments",
+            "Alexa, ask fleet ops to approve",
+            "Alexa, ask fleet ops to reject"
           ],
-          "name": "OpsPilot",
-          "description": "OpsPilot investigates one service on the command center and waits for approve or reject. It uses the same agent as the board."
+          "name": "FleetOps",
+          "description": "FleetOps investigates one service on Fleet Commander and waits for approve or reject. It uses the same agent as the board."
         }
       },
       "isAvailableWorldwide": true,
-      "testingInstructions": "Open the skill and say what's wrong with payments. Then say approve or reject. The agent must be running and the skill endpoint must be the public tunnel URL ending in /alexa.",
+      "testingInstructions": "Open the skill and say what's wrong with payments. Then say approve or reject. The endpoint is https://yn6f6qpstp.us-east-1.awsapprunner.com/alexa.",
       "category": "ORGANIZERS_AND_ASSISTANTS",
       "distributionCountries": []
     },
     "apis": {
       "custom": {
         "endpoint": {
-          "uri": "https://REPLACE-WITH-TUNNEL.example/alexa"
+          "uri": "https://yn6f6qpstp.us-east-1.awsapprunner.com/alexa"
         }
       }
     },

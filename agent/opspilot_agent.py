@@ -86,15 +86,16 @@ class OpsPilotAgent:
                 reply += f" The log says: {log}."
             reply += (
                 f" Approve runs {action} to {target} and marks {name} healthy at error rate 0. "
-                "Reject leaves it open as triage. Override picks a different action, and nothing runs until Execute."
+                "Reject leaves it open as triage. Override picks a different action, and nothing runs until Execute. "
+                "Say why before approve, reject, or override."
             )
         return reply
 
-    def execute_remediation(self, service_id: str, action: str, target: str):
-        return tool_remediate(service_id, action, target)
+    def execute_remediation(self, service_id: str, action: str, target: str, reason: str = ""):
+        return tool_remediate(service_id, action, target, reason)
 
-    def reject_proposal(self, service_id: str):
-        return tool_reject(service_id)
+    def reject_proposal(self, service_id: str, reason: str = ""):
+        return tool_reject(service_id, reason)
 
     def trigger_chaos(self):
         return tool_trigger_chaos()
@@ -103,10 +104,14 @@ class OpsPilotAgent:
         return tool_reset_fleet()
 
     def _infer(self, service_id: str, telemetry: dict) -> dict:
+        from simulator.main import begin_model_call, finish_model_call
+
         metrics = telemetry.get("metrics") or {}
+        begin_model_call(MODEL_ID)
         try:
             analysis = _BEDROCK_POOL.submit(self._bedrock_analysis, service_id, telemetry).result(timeout=8)
             analysis["source"] = "bedrock"
+            finish_model_call(MODEL_ID, "bedrock", None)
         except (Exception, FuturesTimeout) as exc:
             detail = " ".join(str(exc).split())
             analysis = {
@@ -118,6 +123,7 @@ class OpsPilotAgent:
                 "source": "scenario-fallback",
                 "fallback_reason": (detail or exc.__class__.__name__)[:240],
             }
+            finish_model_call(MODEL_ID, "scenario-fallback", analysis["fallback_reason"])
         if analysis.get("recommended_action") not in ACTIONS:
             analysis["recommended_action"] = metrics.get("recommended_action") or "rollback"
         if not analysis.get("target_version_or_value"):
@@ -161,7 +167,7 @@ def _parse_json(text: str) -> dict:
 def _print_fleet(agent: OpsPilotAgent):
     fleet = agent.get_fleet_status()
     summary = fleet["summary"]
-    print("\n================ OpsPilot Fleet ================")
+    print("\n================ FleetOps Fleet ================")
     print(
         f"Active {summary['active']}  SEV-1 {summary['critical']}  "
         f"SEV-2 {summary['sev2']}  SEV-3 {summary['sev3']}  "
@@ -198,7 +204,7 @@ if __name__ == "__main__":
 
     result = agent.analyze_incident(service_id)
     analysis = result.get("analysis", {})
-    print("\n[OpsPilot Analysis]")
+    print("\n[FleetOps Analysis]")
     print(json.dumps(analysis, indent=2))
     print("\napprove / reject / override")
     decision = input("Decision: ").strip().lower()
